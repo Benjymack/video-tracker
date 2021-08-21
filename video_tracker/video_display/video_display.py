@@ -2,6 +2,8 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
+from control_bar import ControlBar
+
 
 class VideoDisplay(QWidget):
     # This would be a view
@@ -13,9 +15,11 @@ class VideoDisplay(QWidget):
         # Create the video
         self._video_widget = QVideoWidget()
 
-        # TODO: Create the toolbar
+        # Create the control bar
+        self._control_bar = ControlBar()
 
         # Create the layout
         self._layout = QVBoxLayout()
         self._layout.addWidget(self._video_widget)
+        self._layout.addWidget(self._control_bar)
         self.setLayout(self._layout)
