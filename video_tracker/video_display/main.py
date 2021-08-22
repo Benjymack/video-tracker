@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
         self._video_controller = VideoController()
 
         self._video_controller.open_video_file(VIDEO_FILE_PATH)
-        self._video_controller.toggle_play_state()
+        self._video_controller.play_pause_toggle()
 
         self.setCentralWidget(self._video_controller.get_video_display())
 

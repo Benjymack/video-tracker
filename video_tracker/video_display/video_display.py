@@ -23,3 +23,12 @@ class VideoDisplay(QWidget):
         self._layout.addWidget(self._video_widget)
         self._layout.addWidget(self._control_bar)
         self.setLayout(self._layout)
+
+    def register_controller(self, controller):
+        self._control_bar.register_controller(controller)
+
+    def set_position(self, new_position):
+        self._control_bar.set_position(new_position)
+
+    def set_duration(self, new_duration):
+        self._control_bar.set_duration(new_duration)

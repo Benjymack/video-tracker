@@ -21,3 +21,9 @@ class VideoPlayer:
             self._media_player.pause()
         else:
             self._media_player.play()
+
+    def register_controller(self, controller):
+        self._media_player.stateChanged.connect(controller.media_state_changed)
+        self._media_player.positionChanged.connect(controller.position_changed)
+        self._media_player.durationChanged.connect(controller.duration_changed)
+        # TODO: Connect error

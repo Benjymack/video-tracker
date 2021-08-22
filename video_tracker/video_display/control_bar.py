@@ -27,10 +27,13 @@ class ControlBar(QWidget):
         self._scrubber.setRange(0, 0)
 
         # Frame decrement button
+        # TODO: Trial which button to use (seek or skip)
         self._frame_decrement_button = QPushButton()
+        self._frame_decrement_button.setIcon(self.style().standardIcon(QStyle.SP_MediaSeekBackward))
 
         # Frame increment button
         self._frame_increment_button = QPushButton()
+        self._frame_increment_button.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipForward))
 
         # TODO: Trial the layout of the buttons
         self._layout = QHBoxLayout()
@@ -43,16 +46,25 @@ class ControlBar(QWidget):
         
         self.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
 
-        self._buttons = (
+        self._controls = (
             self._play_pause_button,
             self._frame_decrement_button,
             self._frame_increment_button,
+            self._scrubber,
         )
+
+        self.set_enabled_controls(False)  # Disable the buttons until a video is opened
 
     def register_controller(self, controller):
         self._play_pause_button.clicked.connect(controller.play_pause_toggle)  # TODO: Add function to controller
         self._scrubber.sliderMoved.connect(controller.position_changed)
 
-    def set_enabled_buttons(self, are_enabled):
-        for button in self._buttons:
-            button.setEnabled(are_enabled)
+    def set_enabled_controls(self, are_enabled):
+        for control in self._controls:
+            control.setEnabled(are_enabled)
+
+    def set_duration(self, new_duration):
+        self._scrubber.setRange(0, new_duration)
+
+    def set_position(self, new_position):
+        self._scrubber.setValue(new_position)  # This gets stuck in an infinite loop
