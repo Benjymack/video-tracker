@@ -57,20 +57,49 @@ class ControlBar(QWidget):
         self.set_enabled_controls(False)  # Disable the buttons until a video is opened
 
     def register_controller(self, controller):
-        self._play_pause_button.clicked.connect(controller.play_pause_toggle)  # TODO: Add function to controller
+        """
+        Registers a controller to the control bar.
+        Expects the following methods to be defined:
+
+            play_pause_toggle()
+            position_changed(new_position)
+
+        :param controller: The controller to connect the signals to
+        """
+        self._play_pause_button.clicked.connect(controller.play_pause_toggle)
         self._scrubber.sliderMoved.connect(controller.position_changed)
 
     def set_enabled_controls(self, are_enabled):
+        """
+        Changes whether the controls (buttons, scrubber, etc) are enabled.
+
+        :param are_enabled: The new enabled status of the controls.
+        """
         for control in self._controls:
             control.setEnabled(are_enabled)
 
     def set_duration(self, new_duration):
+        """
+        Sets the duration of the scrubber bar.
+
+        :param new_duration: The new duration (frames)
+        """
         self._scrubber.setRange(0, new_duration)
 
     def set_position(self, new_position):
+        """
+        Sets the position of the scrubber bar.
+
+        :param new_position: The new position (frames)
+        """
         self._scrubber.setValue(new_position)
 
     def set_media_state(self, new_state):
+        """
+        Sets the media state of the control bar (for the play/pause button)
+
+        :param new_state: The new state to use
+        """
         if new_state == QMediaPlayer.PlayingState:
             self._play_pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
         else:

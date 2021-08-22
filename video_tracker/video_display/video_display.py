@@ -25,16 +25,37 @@ class VideoDisplay(QWidget):
         self.setLayout(self._layout)
 
     def register_controller(self, controller):
+        """
+        Registers a controller to the video display.
+        """
         self._control_bar.register_controller(controller)
 
     def set_position(self, new_position):
+        """
+        Sets the position of the video display.
+
+        :param new_position: The new position (frames)
+        """
         self._control_bar.set_position(new_position)
 
     def set_duration(self, new_duration):
+        """
+        Sets the duration of the video display.
+
+        :param new_duration: The new duration (frames)
+        """
         self._control_bar.set_duration(new_duration)
 
     def set_media_state(self, new_state):
+        """
+        Sets the media state of the video display.
+
+        :param new_state: The new media state
+        """
         self._control_bar.set_media_state(new_state)
 
     def enable_controls(self):
+        """
+        Enables the controls for the video display.
+        """
         self._control_bar.set_enabled_controls(True)
