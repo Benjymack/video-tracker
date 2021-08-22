@@ -27,3 +27,6 @@ class VideoPlayer:
         self._media_player.positionChanged.connect(controller.position_changed)
         self._media_player.durationChanged.connect(controller.duration_changed)
         # TODO: Connect error
+
+    def set_position(self, new_position):
+        self._media_player.setPosition(new_position)

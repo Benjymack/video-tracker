@@ -38,3 +38,4 @@ class VideoController:
     def position_changed(self, new_position):
         print('Position changed to:', new_position)
         self._video_display.set_position(new_position)
+        self._video_player.set_position(new_position)
