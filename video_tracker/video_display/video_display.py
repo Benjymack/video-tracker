@@ -32,3 +32,9 @@ class VideoDisplay(QWidget):
 
     def set_duration(self, new_duration):
         self._control_bar.set_duration(new_duration)
+
+    def set_media_state(self, new_state):
+        self._control_bar.set_media_state(new_state)
+
+    def enable_controls(self):
+        self._control_bar.set_enabled_controls(True)

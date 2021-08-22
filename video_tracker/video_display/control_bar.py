@@ -2,6 +2,7 @@
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget, QPushButton, QStyle, QHBoxLayout, QSlider, QSizePolicy
+from PyQt5.QtMultimedia import QMediaPlayer
 
 
 # Constants
@@ -67,4 +68,10 @@ class ControlBar(QWidget):
         self._scrubber.setRange(0, new_duration)
 
     def set_position(self, new_position):
-        self._scrubber.setValue(new_position)  # This gets stuck in an infinite loop
+        self._scrubber.setValue(new_position)
+
+    def set_media_state(self, new_state):
+        if new_state == QMediaPlayer.PlayingState:
+            self._play_pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
+        else:
+            self._play_pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))

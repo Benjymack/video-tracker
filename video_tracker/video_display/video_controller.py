@@ -21,14 +21,15 @@ class VideoController:
         return self._video_display
 
     def open_video_file(self, video_file):
-        # TODO: Enable control bar
         self._video_player.set_video_file(video_file)
+        self._video_display.enable_controls()
 
     def play_pause_toggle(self):
         self._video_player.toggle_play_state()
 
     def media_state_changed(self, new_state):
         print('State changed to:', new_state)
+        self._video_display.set_media_state(new_state)
 
     def duration_changed(self, new_duration):
         print('Duration changed to:', new_duration)
