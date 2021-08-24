@@ -55,6 +55,6 @@ class VideoPlayer:
         """
         Sets the position of the video player to the specified position.
 
-        :param new_position: The new position (frames)
+        :param new_position: The new position (ms)
         """
         self._media_player.setPosition(new_position)

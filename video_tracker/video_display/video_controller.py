@@ -54,7 +54,7 @@ class VideoController:
 
         :param new_duration: The new duration of the video
         """
-        # TODO: Decide when to convert between current units and frames
+        # TODO: Decide when to convert between current units and milliseconds
         print('Duration changed to:', new_duration)
         self._video_display.set_duration(new_duration)
 
@@ -64,7 +64,7 @@ class VideoController:
 
         :param new_position: The new position in the video
         """
-        # TODO: Decide when to convert between current units and frames
+        # TODO: Decide when to convert between current units and milliseconds
         print('Position changed to:', new_position)
         self._video_display.set_position(new_position)
         self._video_player.set_position(new_position)

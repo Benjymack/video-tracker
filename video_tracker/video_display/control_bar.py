@@ -82,7 +82,7 @@ class ControlBar(QWidget):
         """
         Sets the duration of the scrubber bar.
 
-        :param new_duration: The new duration (frames)
+        :param new_duration: The new duration (ms)
         """
         self._scrubber.setRange(0, new_duration)
 
@@ -90,7 +90,7 @@ class ControlBar(QWidget):
         """
         Sets the position of the scrubber bar.
 
-        :param new_position: The new position (frames)
+        :param new_position: The new position (ms)
         """
         self._scrubber.setValue(new_position)
 

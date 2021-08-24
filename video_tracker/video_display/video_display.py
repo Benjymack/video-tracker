@@ -34,7 +34,7 @@ class VideoDisplay(QWidget):
         """
         Sets the position of the video display.
 
-        :param new_position: The new position (frames)
+        :param new_position: The new position (ms)
         """
         self._control_bar.set_position(new_position)
 
@@ -42,7 +42,7 @@ class VideoDisplay(QWidget):
         """
         Sets the duration of the video display.
 
-        :param new_duration: The new duration (frames)
+        :param new_duration: The new duration (ms)
         """
         self._control_bar.set_duration(new_duration)
 
