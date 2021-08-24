@@ -19,6 +19,9 @@ class VideoPlayer:
         self._media_info = None
 
     def _process_media_info(self):
+        """
+        Processes the _media_info object, extracting the number of frames and the frame rate.
+        """
         if len(self._media_info.video_tracks) != 1:
             raise TrackCountError('Invalid number of video tracks: %d' % len(self._media_info.tracks))
 

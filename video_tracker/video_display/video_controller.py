@@ -61,7 +61,6 @@ class VideoController:
 
         :param new_duration: The new duration of the video
         """
-        # TODO: Decide when to convert between current units and milliseconds
         print('Duration changed to:', new_duration)
         self._video_display.set_duration(new_duration)
 
@@ -71,12 +70,18 @@ class VideoController:
 
         :param new_position: The new position in the video
         """
-        # TODO: Decide when to convert between current units and milliseconds
         print('Position changed to:', new_position)
         self._video_display.set_position(new_position)
         self._video_player.set_position(new_position)
 
     def position_to_ms(self, position, unit):
+        """
+        Converts a position in the specified unit to a number of milliseconds.
+
+        :param position: The position to convert
+        :param unit: The unit that the position is in (frames, ms)
+        :return: The position in milliseconds (ms)
+        """
         if unit == 'frames':
             return round(position / self._video_player.frame_rate * 1000)
         elif unit == 'ms':
@@ -85,6 +90,13 @@ class VideoController:
             raise UnknownUnitError('Unit %s is unknown.' % unit)
 
     def ms_to_position(self, ms, unit):
+        """
+        Converts a position in milliseconds to a position in the specified unit.
+
+        :param ms: The position in milliseconds (ms)
+        :param unit: The unit to convert to (frames, ms)
+        :return: The position in the specified unit
+        """
         if unit == 'frames':
             return round(ms * self._video_player.frame_rate / 1000.0)
         elif unit == 'ms':
@@ -93,9 +105,21 @@ class VideoController:
             raise UnknownUnitError('Unit %s is unknown.' % unit)
 
     def get_current_position(self, unit):
+        """
+        Returns the current position in the specified unit.
+
+        :param unit: The unit to return the position in (frames, ms)
+        :return: The position in the specified unit
+        """
         return self.ms_to_position(self._video_player.get_position(), unit)
 
     def _change_position(self, change, unit):
+        """
+        Changes the position by the specified amount in the specified unit.
+
+        :param change: The amount to change the current position by
+        :param unit: The unit of the change amount (frames, ms)
+        """
         current_position = self.get_current_position(unit)
 
         new_position = current_position + change
@@ -104,7 +128,13 @@ class VideoController:
         self._video_player.set_position(ms_position)
 
     def increment_position(self):
+        """
+        Increments the position, using the current unit, by 1.
+        """
         self._change_position(1, self.unit)
 
     def decrement_position(self):
+        """
+        Decrements the position, using the current unit, by 1.
+        """
         self._change_position(-1, self.unit)
