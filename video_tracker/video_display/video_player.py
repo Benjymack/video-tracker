@@ -2,11 +2,30 @@
 from PyQt5.QtCore import QUrl
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 
+from pymediainfo import MediaInfo
 
+
+# Exceptions
+class TrackCountError(Exception):
+    pass
+
+
+# Classes
 class VideoPlayer:
     # This would be a model
     def __init__(self):
         self._media_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+
+        self._media_info = None
+
+    def _process_media_info(self):
+        if len(self._media_info.video_tracks) != 1:
+            raise TrackCountError('Invalid number of video tracks: %d' % len(self._media_info.tracks))
+
+        track = self._media_info.video_tracks[0]
+
+        self.frame_count = int(track.frame_count)
+        self.frame_rate = float(track.frame_rate)
 
     def set_video_file(self, video_file):
         """
@@ -17,6 +36,9 @@ class VideoPlayer:
         url = QUrl.fromLocalFile(video_file)
         media_content = QMediaContent(url)
         self._media_player.setMedia(media_content)
+
+        self._media_info = MediaInfo.parse(video_file)
+        self._process_media_info()
 
     def initialise_display(self, video_display):
         """
@@ -58,3 +80,11 @@ class VideoPlayer:
         :param new_position: The new position (ms)
         """
         self._media_player.setPosition(new_position)
+
+    def get_position(self):
+        """
+        Gets the current position of the video player.
+
+        :return: The current position (ms)
+        """
+        return self._media_player.position()

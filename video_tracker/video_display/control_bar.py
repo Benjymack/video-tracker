@@ -63,11 +63,15 @@ class ControlBar(QWidget):
 
             play_pause_toggle()
             position_changed(new_position)
+            increment_position()
+            decrement_position()
 
         :param controller: The controller to connect the signals to
         """
         self._play_pause_button.clicked.connect(controller.play_pause_toggle)
         self._scrubber.sliderMoved.connect(controller.position_changed)
+        self._frame_increment_button.clicked.connect(controller.increment_position)
+        self._frame_decrement_button.clicked.connect(controller.decrement_position)
 
     def set_enabled_controls(self, are_enabled):
         """

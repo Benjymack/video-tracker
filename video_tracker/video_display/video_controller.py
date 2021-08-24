@@ -3,9 +3,16 @@ from video_player import VideoPlayer
 from video_display import VideoDisplay
 
 
+# Exceptions
+class UnknownUnitError(Exception):
+    pass
+
+
 # Classes
 class VideoController:
-    def __init__(self):
+    def __init__(self, unit='frames'):
+        self.unit = unit
+
         # Create the video player
         self._video_player = VideoPlayer()
         self._video_player.register_controller(self)
@@ -68,3 +75,36 @@ class VideoController:
         print('Position changed to:', new_position)
         self._video_display.set_position(new_position)
         self._video_player.set_position(new_position)
+
+    def position_to_ms(self, position, unit):
+        if unit == 'frames':
+            return round(position / self._video_player.frame_rate * 1000)
+        elif unit == 'ms':
+            return position
+        else:
+            raise UnknownUnitError('Unit %s is unknown.' % unit)
+
+    def ms_to_position(self, ms, unit):
+        if unit == 'frames':
+            return round(ms * self._video_player.frame_rate / 1000.0)
+        elif unit == 'ms':
+            return ms
+        else:
+            raise UnknownUnitError('Unit %s is unknown.' % unit)
+
+    def get_current_position(self, unit):
+        return self.ms_to_position(self._video_player.get_position(), unit)
+
+    def _change_position(self, change, unit):
+        current_position = self.get_current_position(unit)
+
+        new_position = current_position + change
+        ms_position = self.position_to_ms(new_position, unit)
+
+        self._video_player.set_position(ms_position)
+
+    def increment_position(self):
+        self._change_position(1, self.unit)
+
+    def decrement_position(self):
+        self._change_position(-1, self.unit)
