@@ -15,6 +15,8 @@ class ControlBar(QWidget):
     def __init__(self):
         super().__init__()
 
+        self._controller = None
+
         # Also based off: https://stackoverflow.com/a/57842233
 
         # Play/pause button
@@ -36,8 +38,12 @@ class ControlBar(QWidget):
         self._frame_increment_button = QPushButton()
         self._frame_increment_button.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipForward))
 
+        # Frame display button
+        self._frame_display_button = QPushButton()
+
         # TODO: Trial the layout of the buttons
         self._layout = QHBoxLayout()
+        self._layout.addWidget(self._frame_display_button)
         self._layout.addWidget(self._frame_decrement_button)
         self._layout.addWidget(self._play_pause_button)
         self._layout.addWidget(self._frame_increment_button)
@@ -68,6 +74,9 @@ class ControlBar(QWidget):
 
         :param controller: The controller to connect the signals to
         """
+
+        self._controller = controller
+
         self._play_pause_button.clicked.connect(controller.play_pause_toggle)
         self._scrubber.sliderMoved.connect(controller.position_changed)
         self._frame_increment_button.clicked.connect(controller.increment_position)
@@ -97,6 +106,7 @@ class ControlBar(QWidget):
         :param new_position: The new position (ms)
         """
         self._scrubber.setValue(new_position)
+        self._frame_display_button.setText(str(self._controller.get_current_position(self._controller.get_unit())))
 
     def set_media_state(self, new_state):
         """

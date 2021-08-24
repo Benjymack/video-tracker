@@ -91,3 +91,11 @@ class VideoPlayer:
         :return: The current position (ms)
         """
         return self._media_player.position()
+
+    def set_update_interval(self, interval):
+        """
+        Sets the notify/update interval of the video player.
+
+        :param interval: The interval (ms)
+        """
+        self._media_player.setNotifyInterval(interval)

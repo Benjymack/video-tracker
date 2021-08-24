@@ -24,6 +24,12 @@ class VideoDisplay(QWidget):
         self._layout.addWidget(self._control_bar)
         self.setLayout(self._layout)
 
+    def get_video_widget(self):
+        """
+        Returns the video widget.
+        """
+        return self._video_widget
+
     def register_controller(self, controller):
         """
         Registers a controller to the video display.

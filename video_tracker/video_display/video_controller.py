@@ -11,7 +11,7 @@ class UnknownUnitError(Exception):
 # Classes
 class VideoController:
     def __init__(self, unit='frames'):
-        self.unit = unit
+        self._unit = unit
 
         # Create the video player
         self._video_player = VideoPlayer()
@@ -22,7 +22,7 @@ class VideoController:
         self._video_display.register_controller(self)
 
         # Link the display and the player
-        self._video_player.initialise_display(self._video_display._video_widget)
+        self._video_player.initialise_display(self._video_display.get_video_widget())
 
     def get_video_display(self):
         """
@@ -70,7 +70,6 @@ class VideoController:
 
         :param new_position: The new position in the video
         """
-        print('Position changed to:', new_position)
         self._video_display.set_position(new_position)
         self._video_player.set_position(new_position)
 
@@ -98,7 +97,10 @@ class VideoController:
         :return: The position in the specified unit
         """
         if unit == 'frames':
-            return round(ms * self._video_player.frame_rate / 1000.0)
+            try:
+                return round(ms * self._video_player.frame_rate / 1000.0)
+            except AttributeError:
+                return 0
         elif unit == 'ms':
             return ms
         else:
@@ -131,10 +133,19 @@ class VideoController:
         """
         Increments the position, using the current unit, by 1.
         """
-        self._change_position(1, self.unit)
+        self._change_position(1, self._unit)
 
     def decrement_position(self):
         """
         Decrements the position, using the current unit, by 1.
         """
-        self._change_position(-1, self.unit)
+        self._change_position(-1, self._unit)
+
+    def set_unit(self, new_unit):
+        if new_unit not in ('frames', 'ms'):  # TODO: Move this into a constant
+            raise UnknownUnitError('Unit %s is unknown' % new_unit)
+
+        self._unit = new_unit
+
+    def get_unit(self):
+        return self._unit
