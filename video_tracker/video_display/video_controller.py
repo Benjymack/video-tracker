@@ -24,6 +24,8 @@ class VideoController:
         # Link the display and the player
         self._video_player.initialise_display(self._video_display.get_video_widget())
 
+        self.set_unit(unit)
+
     def get_video_display(self):
         """
         Returns the video display.
@@ -146,6 +148,13 @@ class VideoController:
             raise UnknownUnitError('Unit %s is unknown' % new_unit)
 
         self._unit = new_unit
+
+        if self._unit == 'frames':
+            interval = 100  # TODO: Move this into a constant
+        else:
+            interval = self.position_to_ms(1, self._unit)
+
+        self._video_player.set_update_interval(interval)
 
     def get_unit(self):
         return self._unit
