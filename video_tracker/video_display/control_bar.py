@@ -1,7 +1,7 @@
 # Imports
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QPushButton, QStyle, QHBoxLayout, QSlider, QSizePolicy
+from PyQt5.QtWidgets import QWidget, QPushButton, QStyle, QHBoxLayout, QSlider, QSizePolicy, QSpinBox
 from PyQt5.QtMultimedia import QMediaPlayer
 
 
@@ -39,13 +39,21 @@ class ControlBar(QWidget):
         self._frame_increment_button.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipForward))
 
         # Frame display button
-        self._frame_display_button = QPushButton()
+        self._frame_display_button = QPushButton()  # TODO: Add current/total duration
+        # TODO: The value of this can go well above the duration of the video, by using the frame increment button
+        # I need to set a maximum value for it.
+
+        # Frame skip amount chooser
+        self._frame_skip_amount_button = QSpinBox()
+        self._frame_skip_amount_button.setMinimum(1)
+        self._frame_skip_amount_button.setMaximum(1000)  # TODO: Decide on a maximum
 
         # TODO: Trial the layout of the buttons
         self._layout = QHBoxLayout()
         self._layout.addWidget(self._frame_display_button)
-        self._layout.addWidget(self._frame_decrement_button)
         self._layout.addWidget(self._play_pause_button)
+        self._layout.addWidget(self._frame_decrement_button)
+        self._layout.addWidget(self._frame_skip_amount_button)
         self._layout.addWidget(self._frame_increment_button)
         self._layout.addWidget(self._scrubber)
 
@@ -58,6 +66,8 @@ class ControlBar(QWidget):
             self._frame_decrement_button,
             self._frame_increment_button,
             self._scrubber,
+            self._frame_display_button,
+            self._frame_skip_amount_button,
         )
 
         self.set_enabled_controls(False)  # Disable the buttons until a video is opened
@@ -71,6 +81,7 @@ class ControlBar(QWidget):
             position_changed(new_position)
             increment_position()
             decrement_position()
+            increment_changed(new_increment)
 
         :param controller: The controller to connect the signals to
         """
@@ -81,6 +92,7 @@ class ControlBar(QWidget):
         self._scrubber.sliderMoved.connect(controller.position_changed)
         self._frame_increment_button.clicked.connect(controller.increment_position)
         self._frame_decrement_button.clicked.connect(controller.decrement_position)
+        self._frame_skip_amount_button.valueChanged.connect(controller.increment_changed)
 
     def set_enabled_controls(self, are_enabled):
         """

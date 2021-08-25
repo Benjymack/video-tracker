@@ -132,6 +132,14 @@ class VideoController:
 
         self._video_player.set_position(ms_position)
 
+    def increment_changed(self, new_increment):
+        """
+        Changes the amount of the increment/decrement.
+
+        :param new_increment: The new increment/decrement value.
+        """
+        self._skip_amount = new_increment
+
     def increment_position(self):
         """
         Increments the position, using the current unit, by the skip amount.
