@@ -1,31 +1,31 @@
 # Imports
-from video_player import VideoPlayer
-from video_display import VideoDisplay
-
-
-# Exceptions
-class UnknownUnitError(Exception):
-    pass
+from .video_player import VideoPlayer
+from .video_display import VideoDisplay
+from .exceptions import UnknownUnitError, NonPositiveIncrement, \
+    NonIntegerIncrement
 
 
 # Classes
 class VideoController:
-    def __init__(self, unit='frames', skip_amount=1):
+    def __init__(self, unit='frames', skip_amount=1,
+                 video_player=VideoPlayer, video_display=VideoDisplay):
         self._unit = unit
         self._skip_amount = skip_amount
 
         # Create the video player
-        self._video_player = VideoPlayer()
+        self._video_player = video_player()
         self._video_player.register_controller(self)
 
         # Create the video display
-        self._video_display = VideoDisplay()
+        self._video_display = video_display()
         self._video_display.register_controller(self)
 
         # Link the display and the player
-        self._video_player.initialise_display(self._video_display.get_video_widget())
+        self._video_player.initialise_display(
+            self._video_display.get_video_widget())
 
         self.set_unit(unit)
+        self.increment_changed(skip_amount)
 
     def get_video_display(self):
         """
@@ -138,6 +138,13 @@ class VideoController:
 
         :param new_increment: The new increment/decrement value.
         """
+
+        if new_increment <= 0:
+            raise NonPositiveIncrement(f'{new_increment} is not positive.')
+
+        if not isinstance(new_increment, int):
+            raise NonIntegerIncrement(f'{new_increment} is not an integer.')
+
         self._skip_amount = new_increment
 
     def increment_position(self):

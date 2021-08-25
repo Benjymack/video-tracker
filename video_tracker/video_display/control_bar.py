@@ -1,12 +1,13 @@
 # Imports
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget, QPushButton, QStyle, QHBoxLayout, QSlider, QSizePolicy, QSpinBox
+from PyQt5.QtWidgets import QWidget, QPushButton, QStyle, QHBoxLayout, \
+    QSlider, QSizePolicy, QSpinBox
 from PyQt5.QtMultimedia import QMediaPlayer
 
 
 # Constants
 ICON_SIZE = QSize(16, 16)
+# TODO: Decide on font
 
 
 # Classes
@@ -23,7 +24,8 @@ class ControlBar(QWidget):
         self._play_pause_button = QPushButton()
         self._play_pause_button.setFixedHeight(24)  # TODO: What is this for?
         self._play_pause_button.setIconSize(ICON_SIZE)
-        self._play_pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+        self._play_pause_button.setIcon(
+            self.style().standardIcon(QStyle.SP_MediaPlay))
 
         # Scrubber
         self._scrubber = QSlider(Qt.Horizontal)
@@ -32,21 +34,27 @@ class ControlBar(QWidget):
         # Frame decrement button
         # TODO: Trial which button to use (seek or skip)
         self._frame_decrement_button = QPushButton()
-        self._frame_decrement_button.setIcon(self.style().standardIcon(QStyle.SP_MediaSeekBackward))
+        self._frame_decrement_button.setIcon(
+            self.style().standardIcon(QStyle.SP_MediaSeekBackward))
 
         # Frame increment button
         self._frame_increment_button = QPushButton()
-        self._frame_increment_button.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipForward))
+        self._frame_increment_button.setIcon(
+            self.style().standardIcon(QStyle.SP_MediaSkipForward))
 
         # Frame display button
-        self._frame_display_button = QPushButton()  # TODO: Add current/total duration
-        # TODO: The value of this can go well above the duration of the video, by using the frame increment button
-        # I need to set a maximum value for it.
+        self._frame_display_button = QPushButton()
+        # TODO: Add current/total
+        #  duration
+        # TODO: The value of this can go well above the duration of
+        #  the video, by using the frame increment button I need to set a
+        #  maximum value for it.
 
         # Frame skip amount chooser
         self._frame_skip_amount_button = QSpinBox()
         self._frame_skip_amount_button.setMinimum(1)
-        self._frame_skip_amount_button.setMaximum(1000)  # TODO: Decide on a maximum
+        self._frame_skip_amount_button.setMaximum(1000)
+        # TODO: Decide on a maximum
 
         # TODO: Trial the layout of the buttons
         self._layout = QHBoxLayout()
@@ -70,7 +78,8 @@ class ControlBar(QWidget):
             self._frame_skip_amount_button,
         )
 
-        self.set_enabled_controls(False)  # Disable the buttons until a video is opened
+        self.set_enabled_controls(False)
+        # Disable the buttons until a video is opened
 
     def register_controller(self, controller):
         """
@@ -90,9 +99,12 @@ class ControlBar(QWidget):
 
         self._play_pause_button.clicked.connect(controller.play_pause_toggle)
         self._scrubber.sliderMoved.connect(controller.position_changed)
-        self._frame_increment_button.clicked.connect(controller.increment_position)
-        self._frame_decrement_button.clicked.connect(controller.decrement_position)
-        self._frame_skip_amount_button.valueChanged.connect(controller.increment_changed)
+        self._frame_increment_button.clicked.connect(
+            controller.increment_position)
+        self._frame_decrement_button.clicked.connect(
+            controller.decrement_position)
+        self._frame_skip_amount_button.valueChanged.connect(
+            controller.increment_changed)
 
     def set_enabled_controls(self, are_enabled):
         """
@@ -118,7 +130,8 @@ class ControlBar(QWidget):
         :param new_position: The new position (ms)
         """
         self._scrubber.setValue(new_position)
-        self._frame_display_button.setText(str(self._controller.get_current_position(self._controller.get_unit())))
+        self._frame_display_button.setText(str(
+            self._controller.get_current_position(self._controller.get_unit())))
 
     def set_media_state(self, new_state):
         """
@@ -127,6 +140,8 @@ class ControlBar(QWidget):
         :param new_state: The new state to use
         """
         if new_state == QMediaPlayer.PlayingState:
-            self._play_pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
+            self._play_pause_button.setIcon(
+                self.style().standardIcon(QStyle.SP_MediaPause))
         else:
-            self._play_pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+            self._play_pause_button.setIcon(
+                self.style().standardIcon(QStyle.SP_MediaPlay))

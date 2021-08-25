@@ -4,10 +4,7 @@ from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 
 from pymediainfo import MediaInfo
 
-
-# Exceptions
-class TrackCountError(Exception):
-    pass
+from .exceptions import TrackCountError
 
 
 # Classes
@@ -20,10 +17,12 @@ class VideoPlayer:
 
     def _process_media_info(self):
         """
-        Processes the _media_info object, extracting the number of frames and the frame rate.
+        Processes the _media_info object,
+        extracting the number of frames and the frame rate.
         """
         if len(self._media_info.video_tracks) != 1:
-            raise TrackCountError('Invalid number of video tracks: %d' % len(self._media_info.tracks))
+            raise TrackCountError('Invalid number of video tracks: %d' %
+                                  len(self._media_info.tracks))
 
         track = self._media_info.video_tracks[0]
 
