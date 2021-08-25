@@ -10,8 +10,9 @@ class UnknownUnitError(Exception):
 
 # Classes
 class VideoController:
-    def __init__(self, unit='frames'):
+    def __init__(self, unit='frames', skip_amount=1):
         self._unit = unit
+        self._skip_amount = skip_amount
 
         # Create the video player
         self._video_player = VideoPlayer()
@@ -133,15 +134,15 @@ class VideoController:
 
     def increment_position(self):
         """
-        Increments the position, using the current unit, by 1.
+        Increments the position, using the current unit, by the skip amount.
         """
-        self._change_position(1, self._unit)
+        self._change_position(self._skip_amount, self._unit)
 
     def decrement_position(self):
         """
-        Decrements the position, using the current unit, by 1.
+        Decrements the position, using the current unit, by the skip amount.
         """
-        self._change_position(-1, self._unit)
+        self._change_position(-self._skip_amount, self._unit)
 
     def set_unit(self, new_unit):
         if new_unit not in ('frames', 'ms'):  # TODO: Move this into a constant
