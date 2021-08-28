@@ -6,6 +6,12 @@ from video_display.exceptions import BadIncrement, UnknownUnitError, \
     NonPositiveIncrement, NonIntegerIncrement
 
 
+class MockVideoWidget:
+    pass
+
+MOCK_VIDEO_WIDGET = MockVideoWidget()
+
+
 class MockVideoPlayer:
     def __init__(self):
         self.register_controller = MagicMock()
@@ -16,7 +22,7 @@ class MockVideoPlayer:
 class MockVideoDisplay:
     def __init__(self):
         self.register_controller = MagicMock()
-        self.get_video_widget = MagicMock()
+        self.get_video_widget = MagicMock(return_value=MOCK_VIDEO_WIDGET)
 
 
 def create_test_controller(*args, **kwargs):
@@ -76,3 +82,14 @@ class TestVideoControllerInitialisation(TestCase):
     def test_negative_float_skip(self):
         self.assertRaises(BadIncrement, create_test_controller,
                           skip_amount=-2.2)
+
+    def test_functions_called_init(self):
+        controller = create_test_controller()
+        video_player = controller._video_player
+        video_display = controller._video_display
+
+        # Check whether VideoController calls register_controller
+        video_player.register_controller.assert_called_once_with(controller)
+        video_display.register_controller.assert_called_once_with(controller)
+
+        video_player.initialise_display.assert_called_once_with(MOCK_VIDEO_WIDGET)
