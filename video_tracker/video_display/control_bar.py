@@ -30,6 +30,8 @@ class ControlBar(QWidget):
         self._scrubber = QSlider(Qt.Horizontal)
         self._scrubber.setRange(0, 0)
 
+        # TODO: Add helpful tooltips
+
         # Frame decrement button
         # TODO: Trial which button to use (seek or skip)
         self._frame_decrement_button = QPushButton()
