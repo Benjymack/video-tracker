@@ -7,6 +7,7 @@ from PyQt5.QtMultimedia import QMediaPlayer
 
 # Constants
 ICON_SIZE = QSize(16, 16)
+NUM_CHARACTERS = 4  # TODO: Move this out of a constant
 # TODO: Decide on font
 
 
@@ -22,8 +23,6 @@ class ControlBar(QWidget):
 
         # Play/pause button
         self._play_pause_button = QPushButton()
-        self._play_pause_button.setFixedHeight(24)  # TODO: What is this for?
-        self._play_pause_button.setIconSize(ICON_SIZE)
         self._play_pause_button.setIcon(
             self.style().standardIcon(QStyle.SP_MediaPlay))
 
@@ -44,6 +43,7 @@ class ControlBar(QWidget):
 
         # Frame display button
         self._frame_display_button = QPushButton()
+        self._frame_display_button.setMaximumWidth(10*(NUM_CHARACTERS + 1))
         # TODO: Add current/total
         #  duration
         # TODO: The value of this can go well above the duration of
