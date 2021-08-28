@@ -1,8 +1,14 @@
 # Imports
-from .video_player import VideoPlayer
-from .video_display import VideoDisplay
-from .exceptions import UnknownUnitError, NonPositiveIncrement, \
-    NonIntegerIncrement
+try:
+    from video_display.video_player import VideoPlayer
+    from video_display.video_display import VideoDisplay
+    from video_display.exceptions import UnknownUnitError, \
+        NonPositiveIncrement, NonIntegerIncrement
+except ImportError:
+    from video_player import VideoPlayer
+    from video_display import VideoDisplay
+    from exceptions import UnknownUnitError, NonPositiveIncrement, \
+        NonIntegerIncrement
 
 
 # Classes

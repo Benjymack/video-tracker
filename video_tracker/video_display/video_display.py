@@ -2,7 +2,10 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
-from .control_bar import ControlBar
+try:
+    from video_display.control_bar import ControlBar
+except ImportError:
+    from control_bar import ControlBar
 
 
 class VideoDisplay(QWidget):

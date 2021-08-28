@@ -4,7 +4,10 @@ from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 
 from pymediainfo import MediaInfo
 
-from .exceptions import TrackCountError
+try:
+    from video_display.exceptions import TrackCountError
+except ImportError:
+    from exceptions import TrackCountError
 
 
 # Classes
