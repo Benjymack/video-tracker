@@ -46,8 +46,8 @@ class ControlBar(QWidget):
         # Frame display button
         self._frame_display_button = QPushButton()
         self._frame_display_button.setMaximumWidth(10*(NUM_CHARACTERS + 1))
-        # TODO: Add current/total
-        #  duration
+        self._frame_display_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.MinimumExpanding)
+        # TODO: Add current/total duration
         # TODO: The value of this can go well above the duration of
         #  the video, by using the frame increment button I need to set a
         #  maximum value for it.
