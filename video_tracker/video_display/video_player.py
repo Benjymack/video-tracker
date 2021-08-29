@@ -94,6 +94,14 @@ class VideoPlayer:
         """
         return self._media_player.position()
 
+    def get_duration(self):
+        """
+        Gets the total duration of the video.
+
+        :return: The total duration (ms)
+        """
+        return self._media_player.duration()
+
     def set_update_interval(self, interval):
         """
         Sets the notify/update interval of the video player.
