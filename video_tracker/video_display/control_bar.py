@@ -1,13 +1,13 @@
 # Imports
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QWidget, QPushButton, QStyle, QHBoxLayout, \
-    QSlider, QSizePolicy, QSpinBox
+    QSlider, QSizePolicy, QSpinBox, QLineEdit, QLabel
 from PyQt5.QtMultimedia import QMediaPlayer
-
+from PyQt5.QtGui import QIntValidator
 
 # Constants
 ICON_SIZE = QSize(16, 16)
-NUM_CHARACTERS = 4  # TODO: Move this out of a constant
+INITIAL_NUM_CHARACTERS = 4
 # TODO: Decide on font
 
 
@@ -33,7 +33,6 @@ class ControlBar(QWidget):
         # TODO: Add helpful tooltips
 
         # Frame decrement button
-        # TODO: Trial which button to use (seek or skip)
         self._frame_decrement_button = QPushButton()
         self._frame_decrement_button.setIcon(
             self.style().standardIcon(QStyle.SP_MediaSeekBackward))
@@ -41,17 +40,20 @@ class ControlBar(QWidget):
         # Frame increment button
         self._frame_increment_button = QPushButton()
         self._frame_increment_button.setIcon(
-            self.style().standardIcon(QStyle.SP_MediaSkipForward))
+            self.style().standardIcon(QStyle.SP_MediaSeekForward))
 
         # Frame display button
-        self._frame_display_button = QPushButton()
-        self._frame_display_button.setMaximumWidth(10*(NUM_CHARACTERS + 1))
-        self._frame_display_button.setSizePolicy(QSizePolicy.Fixed,
-                                                 QSizePolicy.MinimumExpanding)
-        # TODO: Add current/total duration
-        # TODO: The value of this can go well above the duration of
-        #  the video, by using the frame increment button I need to set a
-        #  maximum value for it.
+        self._current_position_box = QLineEdit()
+        self._current_position_box.setValidator(QIntValidator())
+        self._current_position_box.setMaxLength(INITIAL_NUM_CHARACTERS)
+        self._current_position_box.setMaximumWidth(10 * (INITIAL_NUM_CHARACTERS + 1))
+
+        self._divider = QLabel('/')
+
+        self._total_length_button = QPushButton()
+        self._total_length_button.setMaximumWidth(10 * (INITIAL_NUM_CHARACTERS + 1))
+        self._total_length_button.setSizePolicy(QSizePolicy.Fixed,
+                                                QSizePolicy.MinimumExpanding)
 
         # Frame skip amount chooser
         self._frame_skip_amount_button = QSpinBox()
@@ -59,17 +61,19 @@ class ControlBar(QWidget):
         self._frame_skip_amount_button.setMaximum(1000)
         # TODO: Decide on a maximum
 
-        # TODO: Trial the layout of the buttons
         self._layout = QHBoxLayout()
-        self._layout.addWidget(self._frame_display_button)
-        self._layout.addWidget(self._play_pause_button)
         self._layout.addWidget(self._frame_decrement_button)
         self._layout.addWidget(self._frame_skip_amount_button)
         self._layout.addWidget(self._frame_increment_button)
+        self._layout.addWidget(self._play_pause_button)
         self._layout.addWidget(self._scrubber)
+        self._layout.addWidget(self._current_position_box)
+        self._layout.addWidget(self._divider)
+        self._layout.addWidget(self._total_length_button)
 
+        self._layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self._layout)
-        
+
         self.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
 
         self._controls = (
@@ -77,7 +81,8 @@ class ControlBar(QWidget):
             self._frame_decrement_button,
             self._frame_increment_button,
             self._scrubber,
-            self._frame_display_button,
+            self._total_length_button,
+            self._current_position_box,
             self._frame_skip_amount_button,
         )
 
@@ -108,6 +113,16 @@ class ControlBar(QWidget):
             controller.decrement_position)
         self._frame_skip_amount_button.valueChanged.connect(
             controller.increment_changed)
+        self._current_position_box.textEdited.connect(
+            self._position_changed)
+
+    def _position_changed(self, new_position):
+        try:
+            new_position = int(new_position)
+        except ValueError:
+            new_position = 0
+
+        self._controller.position_changed(self._controller.position_to_ms(new_position))
 
     def set_enabled_controls(self, are_enabled):
         """
@@ -126,6 +141,20 @@ class ControlBar(QWidget):
         """
         self._scrubber.setRange(0, new_duration)
 
+        duration_unit = self._controller.ms_to_position(new_duration)
+
+        unit_characters = len(str(duration_unit))
+
+        self._set_position_sizes(unit_characters)
+
+        self._total_length_button.setText(str(duration_unit))
+
+    def _set_position_sizes(self, num_characters):
+        self._current_position_box.setMaxLength(num_characters)
+        self._current_position_box.setMaximumWidth(10 * (num_characters + 1))
+
+        self._total_length_button.setMaximumWidth(10 * (num_characters + 1))
+
     def set_position(self, new_position):
         """
         Sets the position of the scrubber bar.
@@ -133,8 +162,8 @@ class ControlBar(QWidget):
         :param new_position: The new position (ms)
         """
         self._scrubber.setValue(new_position)
-        self._frame_display_button.setText(str(
-            self._controller.get_current_position(self._controller.get_unit())))
+        self._current_position_box.setText(str(
+            self._controller.get_current_position()))
 
     def set_media_state(self, new_state):
         """
