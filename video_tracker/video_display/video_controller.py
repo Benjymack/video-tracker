@@ -82,14 +82,19 @@ class VideoController:
         self._video_display.set_position(new_position)
         self._video_player.set_position(new_position)
 
-    def position_to_ms(self, position, unit):
+    def position_to_ms(self, position, unit=None):
         """
         Converts a position in the specified unit to a number of milliseconds.
 
         :param position: The position to convert
-        :param unit: The unit that the position is in (frames, ms)
+        :param unit: The unit that the position is in (frames, ms).
+        Default: current unit
         :return: The position in milliseconds (ms)
         """
+
+        if unit is None:
+            unit = self.get_unit()
+
         if unit == 'frames':
             return round(position / self._video_player.frame_rate * 1000)
         elif unit == 'ms':
@@ -97,14 +102,19 @@ class VideoController:
         else:
             raise UnknownUnitError('Unit %s is unknown.' % unit)
 
-    def ms_to_position(self, ms, unit):
+    def ms_to_position(self, ms, unit=None):
         """
         Converts a position in milliseconds to a position in the specified unit.
 
         :param ms: The position in milliseconds (ms)
         :param unit: The unit to convert to (frames, ms)
+        Default: current unit
         :return: The position in the specified unit
         """
+
+        if unit is None:
+            unit = self.get_unit()
+
         if unit == 'frames':
             try:
                 return round(ms * self._video_player.frame_rate / 1000.0)
@@ -115,11 +125,12 @@ class VideoController:
         else:
             raise UnknownUnitError('Unit %s is unknown.' % unit)
 
-    def get_current_position(self, unit):
+    def get_current_position(self, unit=None):
         """
         Returns the current position in the specified unit.
 
         :param unit: The unit to return the position in (frames, ms)
+        Default: current unit
         :return: The position in the specified unit
         """
         return self.ms_to_position(self._video_player.get_position(), unit)
