@@ -15,7 +15,8 @@ class TestInit(TestVideoPlayer):
         self.assertIsInstance(self.video_player._media_player, QMediaPlayer)
 
     def test_initial_play_state(self):
-        self.assertEqual(self.video_player._media_player.state(), QMediaPlayer.StoppedState)
+        self.assertEqual(self.video_player._media_player.state(),
+                         QMediaPlayer.StoppedState)
 
 
 # TODO: Test different video formats

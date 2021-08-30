@@ -1,8 +1,7 @@
 # Imports
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
-from video_player import VideoPlayer
-from video_display import VideoDisplay
+from video_controller import VideoController
 
 
 # Constants
@@ -13,14 +12,12 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self._video_player = VideoPlayer()
-        self._video_display = VideoDisplay()
+        self._video_controller = VideoController()
 
-        self._video_player.initialise_display(self._video_display._video_widget)
-        self._video_player.set_video_file(VIDEO_FILE_PATH)
-        self._video_player.toggle_play_state()
+        self._video_controller.open_video_file(VIDEO_FILE_PATH)
+        self._video_controller.play_pause_toggle()
 
-        self.setCentralWidget(self._video_display)
+        self.setCentralWidget(self._video_controller.get_video_display())
 
 
 if __name__ == '__main__':
