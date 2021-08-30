@@ -80,6 +80,9 @@ class VideoController:
         :param new_position: The new position in the video
         """
 
+        if new_position < 0:
+            new_position = 0
+
         if new_position > self._video_player.get_duration():
             new_position = self._video_player.get_duration()
 
@@ -150,6 +153,12 @@ class VideoController:
 
         new_position = current_position + change
         ms_position = self.position_to_ms(new_position, unit)
+
+        if ms_position < 0:
+            ms_position = 0
+
+        if ms_position > self._video_player.get_duration():
+            ms_position = self._video_player.get_duration()
 
         self._video_player.set_position(ms_position)
 

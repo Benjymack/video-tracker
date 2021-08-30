@@ -19,6 +19,18 @@ class MockVideoPlayer:
         self.initialise_display = MagicMock()
         self.set_update_interval = MagicMock()
 
+        self._position = 0
+        self.frame_rate = 1
+
+    def get_position(self):
+        return self._position
+
+    def set_position(self, new_position):
+        self._position = new_position
+
+    def get_duration(self):
+        return 10000  # 10 seconds (1fps => 10 frames)
+
 
 class MockVideoDisplay:
     def __init__(self):
@@ -83,6 +95,35 @@ class TestVideoControllerInitialisation(TestCase):
     def test_negative_float_skip(self):
         self.assertRaises(BadIncrement, create_test_controller,
                           skip_amount=-2.2)
+
+    def test_skip_to_zero(self):
+        controller = create_test_controller()
+        controller.increment_position()
+        controller.decrement_position()
+
+        self.assertEqual(controller.get_current_position(), 0)
+
+    def test_skip_to_negative(self):
+        controller = create_test_controller()
+        controller.decrement_position()
+
+        self.assertEqual(0, controller.get_current_position())
+
+    def test_skip_to_duration(self):
+        controller = create_test_controller()
+
+        for _ in range(10):
+            controller.increment_position()
+
+        self.assertEqual(10, controller.get_current_position())
+
+    def test_skip_beyond_duration(self):
+        controller = create_test_controller()
+
+        for _ in range(11):
+            controller.increment_position()
+
+        self.assertEqual(10, controller.get_current_position())
 
     def test_functions_called_init(self):
         controller = create_test_controller()
