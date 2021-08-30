@@ -58,14 +58,13 @@ class ControlBar(QWidget):
         # Frame skip amount chooser
         self._frame_skip_amount_button = QSpinBox()
         self._frame_skip_amount_button.setMinimum(1)
-        self._frame_skip_amount_button.setMaximum(1000)
-        # TODO: Decide on a maximum
+        self._frame_skip_amount_button.setMaximum(10**INITIAL_NUM_CHARACTERS)
 
         self._layout = QHBoxLayout()
+        self._layout.addWidget(self._play_pause_button)
         self._layout.addWidget(self._frame_decrement_button)
         self._layout.addWidget(self._frame_skip_amount_button)
         self._layout.addWidget(self._frame_increment_button)
-        self._layout.addWidget(self._play_pause_button)
         self._layout.addWidget(self._scrubber)
         self._layout.addWidget(self._current_position_box)
         self._layout.addWidget(self._divider)
