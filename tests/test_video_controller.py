@@ -9,6 +9,7 @@ from video_display.exceptions import BadIncrement, UnknownUnitError, \
 class MockVideoWidget:
     pass
 
+
 MOCK_VIDEO_WIDGET = MockVideoWidget()
 
 
@@ -92,4 +93,5 @@ class TestVideoControllerInitialisation(TestCase):
         video_player.register_controller.assert_called_once_with(controller)
         video_display.register_controller.assert_called_once_with(controller)
 
-        video_player.initialise_display.assert_called_once_with(MOCK_VIDEO_WIDGET)
+        video_player.initialise_display.assert_called_once_with(
+            MOCK_VIDEO_WIDGET)
