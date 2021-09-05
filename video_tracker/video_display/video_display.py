@@ -1,11 +1,18 @@
 # Imports
-from PyQt5.QtWidgets import QWidget, QVBoxLayout
-from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGraphicsScene, QGraphicsView, QGraphicsTextItem, QGraphicsLineItem
+from PyQt5.QtMultimediaWidgets import QVideoWidget, QGraphicsVideoItem
+from PyQt5.QtCore import QSizeF, Qt, QSize
 
 try:
     from video_display.control_bar import ControlBar
+    from video_display.graphics_scene import GraphicsScene
 except ImportError:
     from control_bar import ControlBar
+    from graphics_scene import GraphicsScene
+
+
+# Constants
+SIZE_HINT = QSize(640, 480)
 
 
 class VideoDisplay(QWidget):
@@ -16,16 +23,43 @@ class VideoDisplay(QWidget):
         # Based off: https://stackoverflow.com/a/57842233
 
         # Create the video
-        self._video_widget = QVideoWidget()
+        self._video_widget = QGraphicsVideoItem()
+        self._video_widget.nativeSizeChanged.connect(self._native_size_changed)
+
+        self._scene = GraphicsScene(self)
+        self._view = QGraphicsView(self._scene)
+        self._view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self._view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        self._scene.addItem(self._video_widget)
 
         # Create the control bar
         self._control_bar = ControlBar()
 
         # Create the layout
         self._layout = QVBoxLayout()
-        self._layout.addWidget(self._video_widget)
+        self._layout.addWidget(self._view)
         self._layout.addWidget(self._control_bar)
         self.setLayout(self._layout)
+
+    def _native_size_changed(self, size):
+        if size.isEmpty():
+            return  # Stop weird issue with it not being centered if we
+            # scale an empty QSizeF
+        size.scale(SIZE_HINT.width(), SIZE_HINT.height(), Qt.KeepAspectRatio)
+        self._video_widget.setSize(size)
+        self.resizeEvent(None)
+
+    def add_overlay(self, overlay, mouse_press, mouse_move, mouse_release):
+        self._scene.addItem(overlay)
+        self._scene.set_functions(mouse_press, mouse_move, mouse_release)
+
+    def sizeHint(self):
+        return SIZE_HINT
+
+    def resizeEvent(self, event):
+        self._view.fitInView(self._video_widget, Qt.KeepAspectRatio)
+        print(self._video_widget.size())
 
     def get_video_widget(self):
         """

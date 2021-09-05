@@ -39,6 +39,13 @@ class VideoController:
         """
         return self._video_display
 
+    def get_video_widget(self):
+        return self._video_display.get_video_widget()
+
+    def add_overlay(self, overlay, mouse_press, mouse_move, mouse_release):
+        self._video_display.add_overlay(overlay, mouse_press, mouse_move,
+                                        mouse_release)
+
     def open_video_file(self, video_file):
         """
         Opens a video file, and displays it.
