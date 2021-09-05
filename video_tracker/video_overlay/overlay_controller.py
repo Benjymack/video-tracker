@@ -13,11 +13,24 @@ class OverlayController:
         video_controller.add_overlay(self._overlay_canvas, self._mouse_press,
                                      self._mouse_move, self._mouse_release)
 
+        self._overlay_items = (
+            self._overlay_canvas.get_reference_axes(),
+        )
+
+    def _find_items_containing(self, pos):
+        for item in self._overlay_items:
+            if item.sceneBoundingRect().isEmpty() or \
+                    item.sceneBoundingRect().contains(pos):
+                yield item
+
     def _mouse_press(self, event):
-        print('Overlay press')
+        for item in self._find_items_containing(event.scenePos()):
+            item.mouse_press(event)
 
     def _mouse_move(self, event):
-        print('Overlay move')
+        for item in self._find_items_containing(event.scenePos()):
+            item.mouse_move(event)
 
     def _mouse_release(self, event):
-        print('Overlay release')
+        for item in self._find_items_containing(event.scenePos()):
+            item.mouse_release(event)
