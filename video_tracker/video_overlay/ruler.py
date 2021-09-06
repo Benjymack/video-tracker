@@ -95,11 +95,9 @@ class Ruler(QGraphicsItemGroup):
 
         if pos1_distance <= TRIGGER_DISTANCE and pos1_distance <= pos2_distance:
             self._current_moving_pos = 1
-            print(1)
         elif pos2_distance <= TRIGGER_DISTANCE and \
                 pos2_distance <= pos1_distance:
             self._current_moving_pos = 2
-            print(2)
         else:
             self._current_moving_pos = 0
             if self._length_text.sceneBoundingRect().contains(event.scenePos()):
@@ -116,7 +114,6 @@ class Ruler(QGraphicsItemGroup):
 
     def mouse_move(self, event):
         self._mouse_event(event)
-        print(self._length_text.hasFocus())
 
     def mouse_release(self, event):
         self._mouse_event(event)

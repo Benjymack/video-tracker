@@ -13,9 +13,12 @@ class OverlayController:
         video_controller.add_overlay(self._overlay_canvas, self._mouse_press,
                                      self._mouse_move, self._mouse_release)
 
+        self._reference_axes = self._overlay_canvas.get_reference_axes()
+        self._ruler = self._overlay_canvas.get_ruler()
+
         self._overlay_items = (
-            self._overlay_canvas.get_reference_axes(),
-            self._overlay_canvas.get_ruler()
+            self._reference_axes,
+            self._ruler,
         )
 
     def _find_items_containing(self, pos):
