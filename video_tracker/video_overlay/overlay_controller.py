@@ -21,6 +21,12 @@ class OverlayController:
             self._ruler,
         )
 
+    def get_origin_pos(self):
+        return self._reference_axes.get_origin_pos()
+
+    def get_reference_angle(self):
+        return self._reference_axes.get_reference_angle()
+
     def _find_items_containing(self, pos):
         for item in self._overlay_items:
             if item.sceneBoundingRect().isEmpty() or \

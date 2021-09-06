@@ -52,6 +52,12 @@ class ReferenceAxes(QGraphicsItemGroup):
         self._reference_pos = QPointF(0, 0)
         self._reference_angle = 0
 
+    def get_origin_pos(self):
+        return self._reference_pos.x(), self._reference_pos.y()
+
+    def get_reference_angle(self):
+        return self._reference_angle
+
     def _move_origin_to(self, pos):
         self._reference_pos = pos
         self.setPos(self._reference_pos)
