@@ -108,7 +108,9 @@ class Ruler(QGraphicsItemGroup):
 
         if not self._length_text.hasFocus():
             self._length_text.setTextInteractionFlags(Qt.NoTextInteraction)
-            self._length_text.update()
+            cursor = self._length_text.textCursor()
+            cursor.clearSelection()
+            self._length_text.setTextCursor(cursor)
 
         self._mouse_event(event)
 
