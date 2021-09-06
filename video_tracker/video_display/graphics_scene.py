@@ -10,6 +10,13 @@ class GraphicsScene(QGraphicsScene):
         self._mouse_move = lambda event: None
         self._mouse_release = lambda event: None
 
+    def keyPressEvent(self, event):
+        super().keyPressEvent(event)
+
+        focused_item = self.focusItem()
+        if focused_item is not None:
+            focused_item.keyPressEvent(event)
+
     def set_functions(self, mouse_press, mouse_move, mouse_release):
         self._mouse_press = mouse_press
         self._mouse_move = mouse_move

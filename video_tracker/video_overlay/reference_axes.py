@@ -67,7 +67,7 @@ class ReferenceAxes(QGraphicsItemGroup):
 
         self._angle_rect.setX(math.sqrt(dx**2 + dy**2))
 
-    def mouse_event(self, event):
+    def _mouse_event(self, event):
         if self._current_moved_point == 'origin':
             self._move_origin_to(event.scenePos())
         elif self._current_moved_point == 'angle':
@@ -81,13 +81,13 @@ class ReferenceAxes(QGraphicsItemGroup):
         else:
             self._current_moved_point = None
 
-        self.mouse_event(event)
+        self._mouse_event(event)
 
     def mouse_move(self, event):
-        self.mouse_event(event)
+        self._mouse_event(event)
 
     def mouse_release(self, event):
-        self.mouse_event(event)
+        self._mouse_event(event)
 
         if self._current_moved_point == 'angle':
             self._angle_rect.setX(ANGLE_RECT_DISTANCE)

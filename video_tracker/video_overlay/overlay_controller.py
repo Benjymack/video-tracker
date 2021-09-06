@@ -15,6 +15,7 @@ class OverlayController:
 
         self._overlay_items = (
             self._overlay_canvas.get_reference_axes(),
+            self._overlay_canvas.get_ruler()
         )
 
     def _find_items_containing(self, pos):
