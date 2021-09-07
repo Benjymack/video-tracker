@@ -1,8 +1,6 @@
 # Imports
-from PyQt5.QtWidgets import QGraphicsItemGroup, QGraphicsLineItem, \
-    QGraphicsTextItem
-from PyQt5.QtCore import QPointF, Qt
-from PyQt5.QtGui import QTextCursor
+from PyQt5.QtWidgets import QGraphicsItemGroup, QGraphicsLineItem
+from PyQt5.QtCore import QPointF
 
 try:
     from video_overlay.length_text import LengthText
@@ -30,8 +28,6 @@ class Ruler(QGraphicsItemGroup):
                                             0, RULER_DISTANCE, self)
 
         self._length_text = LengthText('1m', self)
-        # self._length_text.setFlags(QGraphicsTextItem.ItemIsFocusable | QGraphicsTextItem.ItemIsSelectable)
-        # self._length_text.setTextInteractionFlags(Qt.TextEditorInteraction)
 
         self._update_lines()
 
@@ -60,7 +56,6 @@ class Ruler(QGraphicsItemGroup):
         self._pos2_line.setLine(self._pos2.x(), self._pos2.y(), x2, y2)
         self._join_line.setLine(x1, y1, x2, y2)
 
-
         text_width = self._length_text.boundingRect().width()
         text_x = (x1 + x2) / 2 - math.cos(join_angle_rad) * text_width / 2
         text_y = (y1 + y2) / 2 - math.sin(join_angle_rad) * text_width / 2
@@ -83,8 +78,6 @@ class Ruler(QGraphicsItemGroup):
             self._move_pos2(event.scenePos())
 
     def mouse_press(self, event):
-        print('Ruler press')
-
         event_x, event_y = event.scenePos().x(), event.scenePos().y()
 
         # Determine the closest moving point
@@ -101,14 +94,10 @@ class Ruler(QGraphicsItemGroup):
         else:
             self._current_moving_pos = 0
             if self._length_text.sceneBoundingRect().contains(event.scenePos()):
-                self._length_text.setTextInteractionFlags(Qt.TextEditorInteraction)
-                self._length_text.setFocus()
+                self._length_text.focus_in()
 
         if not self._length_text.hasFocus():
-            self._length_text.setTextInteractionFlags(Qt.NoTextInteraction)
-            cursor = self._length_text.textCursor()
-            cursor.clearSelection()
-            self._length_text.setTextCursor(cursor)
+            self._length_text.focus_out()
 
         self._mouse_event(event)
 
