@@ -111,12 +111,16 @@ class Ruler(QGraphicsItemGroup):
             if self._length_text.sceneBoundingRect().contains(event.scenePos()):
                 self._length_text.focus_in()
 
+        length_text_had_focus = False
         if not self._length_text.hasFocus():
+            if self._length_text.has_focus:
+                length_text_had_focus = True
             self._length_text.focus_out()
 
         self._mouse_event(event)
 
-        return self._current_moving_pos != 0
+        return self._current_moving_pos != 0 or \
+               self._length_text.hasFocus() or length_text_had_focus
 
     def mouse_move(self, event):
         """

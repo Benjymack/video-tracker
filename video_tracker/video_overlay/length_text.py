@@ -18,6 +18,8 @@ class LengthText(QGraphicsTextItem):
         self._regexp = QRegExp(LENGTH_REGEXP)
         self._validator = QRegExpValidator(self._regexp)
 
+        self.has_focus = False
+
     def focus_in(self):
         """
         Enable the text item when the focus is set.
@@ -28,6 +30,7 @@ class LengthText(QGraphicsTextItem):
         self.setTextInteractionFlags(Qt.TextEditorInteraction)
 
         self.setFocus()
+        self.has_focus = True
 
     def focus_out(self):
         """
@@ -44,6 +47,8 @@ class LengthText(QGraphicsTextItem):
         text = self.document().toPlainText()
 
         is_valid = self._validator.validate(text, 0)[0]
+
+        self.has_focus = False
 
         if is_valid != QRegExpValidator.Acceptable:
             # The length is not valid, so notify the user and set the focus
