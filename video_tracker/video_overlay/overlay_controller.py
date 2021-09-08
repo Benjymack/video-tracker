@@ -7,9 +7,9 @@ except ImportError:
 
 # Classes
 class OverlayController:
-    def __init__(self, video_controller):
+    def __init__(self, video_controller, overlay_canvas=OverlayCanvas):
         # Create the overlay canvas
-        self._overlay_canvas = OverlayCanvas()
+        self._overlay_canvas = overlay_canvas()
         video_controller.add_overlay(self._overlay_canvas, self._mouse_press,
                                      self._mouse_move, self._mouse_release)
 
