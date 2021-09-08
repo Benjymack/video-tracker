@@ -19,6 +19,7 @@ class MockVideoPlayer:
         self.initialise_display = MagicMock()
         self.set_update_interval = MagicMock()
         self.toggle_play_state = MagicMock()
+        self.set_video_file = MagicMock()
 
         self._position = 0
         self.frame_rate = 1
@@ -38,6 +39,7 @@ class MockVideoDisplay:
         self.register_controller = MagicMock()
         self.get_video_widget = MagicMock(return_value=MOCK_VIDEO_WIDGET)
         self.set_media_state = MagicMock()
+        self.enable_controls = MagicMock()
 
 
 def create_test_controller(*args, **kwargs):
@@ -159,3 +161,12 @@ class TestVideoControllerFunctions(TestVideoController):
             self.video_controller.media_state_changed(new_state)
             self.video_controller._video_display.set_media_state.\
                 assert_called_with(new_state)
+
+    def test_open_video_file(self):
+        file_path = 'C:/thing/video.mp4'
+        self.video_controller.open_video_file(file_path)
+        self.video_controller._video_player.set_video_file.assert_called_with(
+            file_path)
+        self.video_controller._video_display.enable_controls.assert_called()
+
+

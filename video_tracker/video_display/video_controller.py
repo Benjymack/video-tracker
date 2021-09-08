@@ -88,7 +88,7 @@ class VideoController:
         """
         Changes the duration of the video.
 
-        :param new_duration: The new duration of the video
+        :param new_duration: The new duration of the video (ms)
         """
         print('Duration changed to:', new_duration)
         self._video_display.set_duration(new_duration)
