@@ -74,8 +74,7 @@ class VideoPlayer:
         :param controller: The controller to connect the signals to
         """
         self._media_player.stateChanged.connect(controller.media_state_changed)
-        self._media_player.positionChanged.connect(
-            lambda pos: controller.change_position(pos, 'ms'))
+        self._media_player.positionChanged.connect(controller.position_changed)
         self._media_player.durationChanged.connect(controller.duration_changed)
         # TODO: Connect error
 
