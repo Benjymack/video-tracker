@@ -43,6 +43,11 @@ class VideoDisplay(QWidget):
         self.setLayout(self._layout)
 
     def _native_size_changed(self, size):
+        """
+        Rescale the video if the native size of the video is changed.
+
+        :param size: The native size of the video
+        """
         if size.isEmpty():
             return  # Stop weird issue with it not being centered if we
             # scale an empty QSizeF
@@ -51,15 +56,30 @@ class VideoDisplay(QWidget):
         self.resizeEvent(None)
 
     def add_overlay(self, overlay, mouse_press, mouse_move, mouse_release):
+        """
+        Adds an overlay to the video display, as well as binding the mouse
+        press, movement and release events to the provided functions.
+
+        :param overlay: The overlay (QGraphicsItem) to add
+        :param mouse_press: Function for when the mouse is pressed on the scene.
+        :param mouse_move: Function for when the mouse is moved on the scene.
+        :param mouse_release: Function for when the mouse is released on the
+        scene.
+        """
         self._scene.addItem(overlay)
         self._scene.set_functions(mouse_press, mouse_move, mouse_release)
 
     def sizeHint(self):
+        """
+        Returns the size hint of the video display.
+        """
         return SIZE_HINT
 
     def resizeEvent(self, event):
+        """
+        When the video display is resized, fit the video into the view.
+        """
         self._view.fitInView(self._video_widget, Qt.KeepAspectRatio)
-        print(self._video_widget.size())
 
     def get_video_widget(self):
         """

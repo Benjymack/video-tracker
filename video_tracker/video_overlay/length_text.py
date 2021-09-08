@@ -19,13 +19,22 @@ class LengthText(QGraphicsTextItem):
         self._validator = QRegExpValidator(self._regexp)
 
     def focus_in(self):
-        # Enable text interation
+        """
+        Enable the text item when the focus is set.
+        NOTE: This sets the focus to itself, so a separate setFocus() is not
+        required.
+        """
+        # Enable text interaction
         self.setTextInteractionFlags(Qt.TextEditorInteraction)
 
         self.setFocus()
 
     def focus_out(self):
-        # Disable text interation
+        """
+        Disables the text interaction and validates the input when the focus
+        is cleared.
+        """
+        # Disable text interaction
         self.setTextInteractionFlags(Qt.NoTextInteraction)
         cursor = self.textCursor()
         cursor.clearSelection()

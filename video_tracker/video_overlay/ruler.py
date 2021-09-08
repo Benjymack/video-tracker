@@ -34,6 +34,9 @@ class Ruler(QGraphicsItemGroup):
         self._current_moving_pos = 0
 
     def _update_lines(self):
+        """
+        Moves all of the lines that make up the ruler to the end points.
+        """
         join_angle = math.degrees(math.atan2(self._pos1.y() - self._pos2.y(),
                                              self._pos1.x() - self._pos2.x()))
 
@@ -64,20 +67,32 @@ class Ruler(QGraphicsItemGroup):
         self._length_text.setRotation(join_angle)
 
     def _move_pos1(self, pos):
+        """
+        Changes the first position to the position specified.
+        """
         self._pos1 = pos
         self._update_lines()
 
     def _move_pos2(self, pos):
+        """
+        Changes the second position to the position specified.
+        """
         self._pos2 = pos
         self._update_lines()
 
     def _mouse_event(self, event):
+        """
+        Moves the currently selected handle to the specified event position.
+        """
         if self._current_moving_pos == 1:
             self._move_pos1(event.scenePos())
         elif self._current_moving_pos == 2:
             self._move_pos2(event.scenePos())
 
     def mouse_press(self, event):
+        """
+        Select the closest handle if it is in range.
+        """
         event_x, event_y = event.scenePos().x(), event.scenePos().y()
 
         # Determine the closest moving point
@@ -101,10 +116,24 @@ class Ruler(QGraphicsItemGroup):
 
         self._mouse_event(event)
 
+        return self._current_moving_pos != 0
+
     def mouse_move(self, event):
+        """
+        Moves the currently selected handle.
+        """
         self._mouse_event(event)
+
+        return self._current_moving_pos != 0
 
     def mouse_release(self, event):
+        """
+        Stops selecting the currently selected handle.
+        """
         self._mouse_event(event)
 
+        return_value = self._current_moving_pos != 0
+
         self._current_moving_pos = 0
+
+        return return_value

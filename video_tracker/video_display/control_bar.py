@@ -116,12 +116,19 @@ class ControlBar(QWidget):
             self._position_changed)
 
     def _position_changed(self, new_position):
+        """
+        Slot for when the user has changed the current position.
+        Updates the current position in the control bar, etc.
+
+        :param new_position: The new position (units)
+        """
         try:
             new_position = int(new_position)
         except ValueError:
             new_position = 0
 
-        self._controller.position_changed(self._controller.position_to_ms(new_position))
+        self._controller.position_changed(
+            self._controller.position_to_ms(new_position))
 
     def set_enabled_controls(self, are_enabled):
         """
@@ -151,6 +158,11 @@ class ControlBar(QWidget):
         self._frame_skip_amount_button.setMaximum(duration_unit)
 
     def _set_position_sizes(self, num_characters):
+        """
+        Sets the reserved length of the position and duration buttons/labels.
+
+        :param num_characters: The number of characters wide to make the items.
+        """
         self._current_position_box.setMaxLength(num_characters)
         self._current_position_box.setMaximumWidth(10 * (num_characters + 1))
 

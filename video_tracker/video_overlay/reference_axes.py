@@ -58,16 +58,33 @@ class ReferenceAxes(QGraphicsItemGroup):
         self._reference_angle = 0
 
     def get_origin_pos(self):
+        """
+        Returns the position of the origin in pixels.
+        """
         return self._reference_pos.x(), self._reference_pos.y()
 
     def get_reference_angle(self):
+        """
+        Returns the reference angle (degrees).
+        """
         return self._reference_angle
 
     def _move_origin_to(self, pos):
+        """
+        Moves the origin to the specified position.
+        """
         self._reference_pos = pos
         self.setPos(self._reference_pos)
 
     def _move_angle_to(self, pos, offset_angle):
+        """
+        Changes the angle to match the specified position,
+        offset by the offset_angle.
+
+        :param pos: The position of the 'handle'
+        :param offset_angle: The angle to offset from the 'handle'
+        :return: The distance between the origin and the handle
+        """
         dx = pos.x() - self._reference_pos.x()
         dy = pos.y() - self._reference_pos.y()
 
@@ -79,6 +96,9 @@ class ReferenceAxes(QGraphicsItemGroup):
         return math.sqrt(dx ** 2 + dy ** 2)
 
     def _mouse_event(self, event):
+        """
+        Move the origin or handles to the specified mouse position.
+        """
         if self._current_moved_point == 'origin':
             self._move_origin_to(event.scenePos())
         elif self._current_moved_point == 'anglex':
@@ -87,6 +107,12 @@ class ReferenceAxes(QGraphicsItemGroup):
             self._y_angle_rect.setY(-self._move_angle_to(event.scenePos(), 90))
 
     def mouse_press(self, event):
+        """
+        Checks if the mouse press occurs inside any of the handles, if so,
+        sets them to move.
+
+        :return: If the mouse press was over a handle.
+        """
         if self._x_angle_rect.sceneBoundingRect().contains(event.scenePos()):
             self._current_moved_point = 'anglex'
         elif self._y_angle_rect.sceneBoundingRect().contains(event.scenePos()):
@@ -98,14 +124,32 @@ class ReferenceAxes(QGraphicsItemGroup):
 
         self._mouse_event(event)
 
+        return self._current_moved_point is not None
+
     def mouse_move(self, event):
+        """
+        Moves the currently selected handle.
+
+        :return: If a handle is actually selected.
+        """
         self._mouse_event(event)
 
+        return self._current_moved_point is not None
+
     def mouse_release(self, event):
+        """
+        Stops moving the currently selected handle.
+
+        :return: If a handle was selected.
+        """
         self._mouse_event(event)
 
         if self._current_moved_point in ('anglex', 'angley'):
             self._x_angle_rect.setX(X_ANGLE_RECT_DISTANCE)
             self._y_angle_rect.setY(-Y_ANGLE_RECT_DISTANCE)
 
+        return_value = self._current_moved_point is not None
+
         self._current_moved_point = None
+
+        return return_value
