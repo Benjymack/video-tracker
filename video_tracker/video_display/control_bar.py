@@ -105,7 +105,8 @@ class ControlBar(QWidget):
         self._controller = controller
 
         self._play_pause_button.clicked.connect(controller.play_pause_toggle)
-        self._scrubber.sliderMoved.connect(controller.position_changed)
+        self._scrubber.sliderMoved.connect(
+            controller.change_position)
         self._frame_increment_button.clicked.connect(
             controller.increment_position)
         self._frame_decrement_button.clicked.connect(
@@ -127,8 +128,7 @@ class ControlBar(QWidget):
         except ValueError:
             new_position = 0
 
-        self._controller.position_changed(
-            self._controller.position_to_ms(new_position))
+        self._controller.change_position(new_position)
 
     def set_enabled_controls(self, are_enabled):
         """

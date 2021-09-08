@@ -93,22 +93,6 @@ class VideoController:
         print('Duration changed to:', new_duration)
         self._video_display.set_duration(new_duration)
 
-    def position_changed(self, new_position):
-        """
-        Changes the current position in the video.
-
-        :param new_position: The new position in the video
-        """
-
-        if new_position < 0:
-            new_position = 0
-
-        if new_position > self._video_player.get_duration():
-            new_position = self._video_player.get_duration()
-
-        self._video_display.set_position(new_position)
-        self._video_player.set_position(new_position)
-
     def position_to_ms(self, position, unit=None):
         """
         Converts a position in the specified unit to a number of milliseconds.
@@ -162,7 +146,7 @@ class VideoController:
         """
         return self.ms_to_position(self._video_player.get_position(), unit)
 
-    def _change_position(self, change, unit):
+    def change_position(self, change, unit):
         """
         Changes the position by the specified amount in the specified unit.
 
@@ -201,13 +185,13 @@ class VideoController:
         """
         Increments the position, using the current unit, by the skip amount.
         """
-        self._change_position(self._skip_amount, self._unit)
+        self.change_position(self._skip_amount, self._unit)
 
     def decrement_position(self):
         """
         Decrements the position, using the current unit, by the skip amount.
         """
-        self._change_position(-self._skip_amount, self._unit)
+        self.change_position(-self._skip_amount, self._unit)
 
     def set_unit(self, new_unit):
         """
