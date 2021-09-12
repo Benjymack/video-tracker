@@ -1,6 +1,6 @@
 # Classes
 class ObjectModel:
-    # Stores information about an object
+    # Model
     def __init__(self, points=None):
         if points is None:
             points = {}

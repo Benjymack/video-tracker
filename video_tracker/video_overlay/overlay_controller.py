@@ -4,9 +4,12 @@ try:
 except ImportError:
     from overlay_canvas import OverlayCanvas
 
+from PyQt5.QtCore import Qt
+
 
 # Classes
 class OverlayController:
+    # Controller
     def __init__(self, video_controller, overlay_canvas=OverlayCanvas):
         # Create the overlay canvas
         self._overlay_canvas = overlay_canvas()
@@ -55,9 +58,10 @@ class OverlayController:
         for item in self._find_items_containing(event.scenePos()):
             anything_done |= item.mouse_press(event)
 
-        if not anything_done:
+        if not anything_done and event.button() == Qt.LeftButton:
             # TODO: Track the current element for the current frame
-            pass
+            print('Tracking object')
+            print(event.scenePos())
 
     def _mouse_move(self, event):
         """
