@@ -62,3 +62,6 @@ class LengthText(QGraphicsTextItem):
             message_box.exec()
 
             self.focus_in()
+
+    def get_length_and_unit(self):
+        return 1.0, 'm'  # TODO: Get actual length

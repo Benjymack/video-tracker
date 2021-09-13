@@ -141,3 +141,11 @@ class Ruler(QGraphicsItemGroup):
         self._current_moving_pos = 0
 
         return return_value
+
+    def get_ruler_length(self):
+        pixel_distance = math.sqrt((self._pos1.x() - self._pos2.x())**2 +
+                                   (self._pos1.y() - self._pos2.y())**2)
+
+        length, unit = self._length_text.get_length_and_unit()
+
+        return pixel_distance, length, unit

@@ -11,6 +11,8 @@ from PyQt5.QtCore import Qt
 class OverlayController:
     # Controller
     def __init__(self, video_controller, overlay_canvas=OverlayCanvas):
+        self._object_controller = None
+
         # Create the overlay canvas
         self._overlay_canvas = overlay_canvas()
         video_controller.add_overlay(self._overlay_canvas, self._mouse_press,
@@ -58,10 +60,9 @@ class OverlayController:
         for item in self._find_items_containing(event.scenePos()):
             anything_done |= item.mouse_press(event)
 
-        if not anything_done and event.button() == Qt.LeftButton:
-            # TODO: Track the current element for the current frame
-            print('Tracking object')
-            print(event.scenePos())
+        if not anything_done and event.button() == Qt.LeftButton and \
+                self._object_controller is not None:
+            self._object_controller.track_current_object(event.scenePos())
 
     def _mouse_move(self, event):
         """
@@ -76,3 +77,9 @@ class OverlayController:
         """
         for item in self._find_items_containing(event.scenePos()):
             item.mouse_release(event)
+
+    def get_ruler_length(self):
+        return self._ruler.get_ruler_length()
+
+    def set_object_controller(self, object_controller):
+        self._object_controller = object_controller

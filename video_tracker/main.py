@@ -21,10 +21,16 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Create the video and overlay controllers
+        # Create the video, overlay and object controllers
         self._video_controller = VideoController()
 
         self._overlay_controller = OverlayController(self._video_controller)
+
+        self._object_controller = ObjectController(self._overlay_controller)
+
+        self._overlay_controller.set_object_controller(self._object_controller)
+
+        self._object_controller.create_object()
 
         # Display the video, etc
         self._main_widget = QWidget()
@@ -35,9 +41,6 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self._main_widget)
 
-        # Create the objects
-        self._object_controller = ObjectController()
-
         # Create a menubar
         # self._menu_bar = self.menuBar()
 
@@ -45,7 +48,7 @@ class MainWindow(QMainWindow):
 
         # Open a video, only for example
         self._video_controller.open_video_file(VIDEO_FILE_PATH)
-        self._video_controller.play_pause_toggle()
+        # self._video_controller.play_pause_toggle()
 
 
 if __name__ == '__main__':
