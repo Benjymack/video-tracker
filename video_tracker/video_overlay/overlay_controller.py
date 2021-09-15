@@ -62,7 +62,7 @@ class OverlayController:
 
         if not anything_done and event.button() == Qt.LeftButton and \
                 self._object_controller is not None:
-            self._object_controller.track_current_object(event.scenePos())
+            self._object_controller.track_current_object(event.scenePos().x(), event.scenePos().y())
 
     def _mouse_move(self, event):
         """
@@ -83,3 +83,6 @@ class OverlayController:
 
     def set_object_controller(self, object_controller):
         self._object_controller = object_controller
+
+    def _display_object_points(self):
+        pass

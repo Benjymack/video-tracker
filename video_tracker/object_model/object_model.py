@@ -8,6 +8,8 @@ class ObjectModel:
         self._object_controller = object_controller
 
     def add_point(self, x, y, frame):
+        if not isinstance(frame, int):
+            raise TypeError('Frame number must be an integer')
         self._points[frame] = (x, y)
 
     def _get_scale_factor(self):
