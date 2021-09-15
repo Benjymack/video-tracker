@@ -5,6 +5,7 @@ except ImportError:
     from overlay_canvas import OverlayCanvas
 
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor
 
 
 # Classes
@@ -63,6 +64,7 @@ class OverlayController:
         if not anything_done and event.button() == Qt.LeftButton and \
                 self._object_controller is not None:
             self._object_controller.track_current_object(event.scenePos().x(), event.scenePos().y())
+            self.update()
 
     def _mouse_move(self, event):
         """
@@ -85,4 +87,16 @@ class OverlayController:
         self._object_controller = object_controller
 
     def _display_object_points(self):
-        pass
+        if self._object_controller is not None:
+            object_points = self._object_controller.get_points_to_display()
+
+            colour = QColor()
+            colour.setRgb(255, 0, 0)
+
+            self._overlay_canvas.clear_points()
+            for object in object_points:
+                for point_id, point in object['points'].items():
+                    self._overlay_canvas.draw_point(*point, colour)
+
+    def update(self):
+        self._display_object_points()
