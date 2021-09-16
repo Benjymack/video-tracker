@@ -37,6 +37,7 @@ class MainWindow(QMainWindow):
 
         self._layout = QHBoxLayout()
         self._layout.addWidget(self._video_controller.get_video_display())
+        self._layout.addWidget(self._object_controller.get_object_display())
         self._main_widget.setLayout(self._layout)
 
         self.setCentralWidget(self._main_widget)

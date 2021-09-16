@@ -1,8 +1,10 @@
 # Imports
 try:
     from object_model.object_model import ObjectModel
+    from object_model.object_display import ObjectDisplay
 except ImportError:
     from object_model import ObjectModel
+    from object_display import ObjectDisplay
 
 
 # Constants
@@ -16,6 +18,11 @@ class ObjectController:
         self._objects = []
         self._overlay_controller = overlay_controller
         self._video_controller = video_controller
+
+        self._object_display = ObjectDisplay()
+
+    def get_object_display(self):
+        return self._object_display
 
     def create_object(self):
         object_ = ObjectModel(self)
