@@ -8,6 +8,9 @@
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QWidget
 
+import platform
+import ctypes
+
 from video_display import VideoController
 from video_overlay import OverlayController
 from object_model import ObjectController
@@ -17,6 +20,14 @@ from object_model import ObjectController
 VIDEO_FILE_PATH = 'tests/example_videos/video1.mp4'
 
 
+# Functions
+def make_dpi_aware():
+    # https://github.com/pyqtgraph/pyqtgraph/issues/756
+    if int(platform.release()) >= 8:
+        ctypes.windll.shcore.SetProcessDpiAwareness(True)
+
+
+# Classes
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -31,6 +42,8 @@ class MainWindow(QMainWindow):
         self._overlay_controller.set_object_controller(self._object_controller)
 
         self._object_controller.create_object()
+
+        self._object_controller.initialise_display()
 
         # Display the video, etc
         self._main_widget = QWidget()
@@ -53,6 +66,9 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
+    # QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    make_dpi_aware()
+
     app = QApplication([])
     main = MainWindow()
     main.show()
