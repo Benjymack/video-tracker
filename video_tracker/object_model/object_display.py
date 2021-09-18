@@ -38,3 +38,6 @@ class ObjectDisplay(QWidget):
 
     def get_data(self, *args):
         return self._object_controller.get_data(*args)
+
+    def update(self):
+        self._object_graph.update()

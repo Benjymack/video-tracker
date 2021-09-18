@@ -73,12 +73,16 @@ class OverlayController:
         for item in self._find_items_containing(event.scenePos()):
             item.mouse_move(event)
 
+        self.update(False)
+
     def _mouse_release(self, event):
         """
         Pass the mouse release down to any containing overlay items.
         """
         for item in self._find_items_containing(event.scenePos()):
             item.mouse_release(event)
+
+        self.update(False)
 
     def get_ruler_length(self):
         return self._ruler.get_ruler_length()
@@ -98,5 +102,9 @@ class OverlayController:
                 for point_id, point in object['points'].items():
                     self._overlay_canvas.draw_point(*point, colour)
 
-    def update(self):
-        self._display_object_points()
+    def update(self, redisplay_points=True):
+        if redisplay_points:
+            self._display_object_points()
+
+        if self._object_controller is not None:
+            self._object_controller.update()

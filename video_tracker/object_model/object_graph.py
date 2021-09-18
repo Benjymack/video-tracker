@@ -87,3 +87,6 @@ class ObjectGraph(PlotWidget):
     def initialise_graph(self):
         self._set_measurement('left', 'y')
         self._set_measurement('bottom', 'x')
+
+    def update(self):
+        self._replot_data()

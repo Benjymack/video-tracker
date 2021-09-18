@@ -37,7 +37,8 @@ class MainWindow(QMainWindow):
 
         self._overlay_controller = OverlayController(self._video_controller)
 
-        self._object_controller = ObjectController(self._overlay_controller, self._video_controller)
+        self._object_controller = ObjectController(self._overlay_controller,
+                                                   self._video_controller)
 
         self._overlay_controller.set_object_controller(self._object_controller)
 

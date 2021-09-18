@@ -55,3 +55,6 @@ class ObjectController:
 
     def get_data(self, *args):
         return self.get_current_object().get_data(*args)
+
+    def update(self):
+        self._object_display.update()
