@@ -7,6 +7,7 @@ from pyqtgraph import TableWidget
 # Constants
 REMOVE_ACTION = 'Remove column'
 INSERT_RIGHT_ACTION = 'Insert new column to right'
+CHANGE_ACTION = 'Change type'
 
 
 # Classes
@@ -58,6 +59,19 @@ class ObjectTable(TableWidget):
             menu.addAction(REMOVE_ACTION)
         menu.addAction(INSERT_RIGHT_ACTION)
 
+        # Choose a new column type
+        if index != 0:
+            type_menu = QMenu(CHANGE_ACTION)
+
+            text_to_measurement = {}
+            for measurement, unit in self._object_display. \
+                    get_current_object_available_measurements().items():
+                text = measurement + ' (' + unit + ')'
+                text_to_measurement[text] = measurement
+                type_menu.addAction(text)
+
+            menu.addMenu(type_menu)
+
         # TODO: Account for when there is a scrollbar
         x = self.horizontalHeader().sectionPosition(index)
         y = self.horizontalHeader().height()
@@ -73,5 +87,7 @@ class ObjectTable(TableWidget):
             del self._columns[index]
         elif action_text == INSERT_RIGHT_ACTION:
             self._columns.insert(index+1, '')
+        elif action_text in text_to_measurement:
+            self._columns[index] = text_to_measurement[action_text]
 
         self.update()
