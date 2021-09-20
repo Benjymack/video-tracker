@@ -17,7 +17,7 @@ class ObjectDisplay(QWidget):
         self._object_controller = object_controller
 
         self._object_graph = ObjectGraph(self)
-        self._object_table = ObjectTable()
+        self._object_table = ObjectTable(self)
 
         self._layout = QVBoxLayout()
         self._layout.addWidget(self._object_graph)
@@ -41,3 +41,4 @@ class ObjectDisplay(QWidget):
 
     def update(self):
         self._object_graph.update()
+        self._object_table.update()
