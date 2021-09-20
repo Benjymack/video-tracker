@@ -92,7 +92,10 @@ class ObjectModel:
         data = {}
 
         for arg in args:
-            measurements = self.calculate_measurement(arg)
+            if arg == '':
+                measurements = {time: '' for time in self._points.keys()}
+            else:
+                measurements = self.calculate_measurement(arg)
             for time, measurement in measurements.items():
                 if time not in data:
                     data[time] = {}

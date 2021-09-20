@@ -1,11 +1,11 @@
 # Imports
 from PyQt5.QtWidgets import QMenu
-from PyQt5.QtCore import QPoint
+from PyQt5.QtCore import QPoint, Qt
 from pyqtgraph import TableWidget
 
 
 # Constants
-REMOVE_ACTION = 'Remove'
+REMOVE_ACTION = 'Remove column'
 INSERT_RIGHT_ACTION = 'Insert new column to right'
 
 
@@ -20,24 +20,39 @@ class ObjectTable(TableWidget):
         self._columns = ['t']
 
         self.horizontalHeader().setSectionsMovable(True)
-        self.horizontalHeader().sectionClicked.connect(
-            self._header_section_clicked)
+        self.horizontalHeader().setContextMenuPolicy(Qt.CustomContextMenu)
+        self.horizontalHeader().customContextMenuRequested.connect(self._header_section_clicked)
+        self.verticalHeader().hide()
 
         self.update()
 
     def update(self):
         self.setColumnCount(len(self._columns))
-        self.setHorizontalHeaderLabels(self._columns)  # TODO: Get nice names
 
         self._tabulate_data()
+
+        self.setHorizontalHeaderLabels(self._columns)  # TODO: Get nice names
 
     def _tabulate_data(self):
         data = self._object_display.get_data(*self._columns)
 
-        self.setData(data)
+        if data is None:
+            final_data = None
+        else:
+            final_data = {}
 
-    def _header_section_clicked(self, index):
+            for time, data_line in data.items():
+                final_data[time] = [data_line[col] for col in self._columns]
+
+        self.setData(final_data)
+
+    def _header_section_clicked(self, pos):
         menu = QMenu()
+
+        index = self.horizontalHeader().logicalIndexAt(pos)
+
+        if index < 0:  # The user didn't actually click on a column
+            return
 
         if index != 0:  # Can't delete the time column
             menu.addAction(REMOVE_ACTION)
