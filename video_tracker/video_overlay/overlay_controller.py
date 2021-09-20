@@ -66,6 +66,9 @@ class OverlayController:
             self._object_controller.track_current_object(event.scenePos().x(), event.scenePos().y())
             self.update()
 
+        if anything_done:
+            self.update(False)
+
     def _mouse_move(self, event):
         """
         Pass the mouse movement down to any containing overlay items.

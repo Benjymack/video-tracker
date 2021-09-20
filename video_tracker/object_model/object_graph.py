@@ -52,8 +52,6 @@ class ObjectGraph(PlotWidget):
         if self._y_measurement is None or self._x_measurement is None:
             return
 
-        print('Replotting data')
-
         data = self._object_display.get_data(self._x_measurement,
                                              self._y_measurement)
 
@@ -85,8 +83,13 @@ class ObjectGraph(PlotWidget):
         self._replot_data()
 
     def initialise_graph(self):
-        self._set_measurement('left', 'y')
-        self._set_measurement('bottom', 'x')
+        self._x_measurement = 'x'
+        self._y_measurement = 'y'
+        self._update_axes()
+
+    def _update_axes(self):
+        self._set_measurement('left', self._y_measurement)
+        self._set_measurement('bottom', self._x_measurement)
 
     def update(self):
-        self._replot_data()
+        self._update_axes()
