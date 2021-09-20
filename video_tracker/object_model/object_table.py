@@ -17,7 +17,7 @@ class ObjectTable(TableWidget):
         self._object_display = object_display
 
         # Start with just time
-        self._columns = ['time']
+        self._columns = ['t']
 
         self.horizontalHeader().setSectionsMovable(True)
         self.horizontalHeader().sectionClicked.connect(
@@ -28,6 +28,13 @@ class ObjectTable(TableWidget):
     def update(self):
         self.setColumnCount(len(self._columns))
         self.setHorizontalHeaderLabels(self._columns)  # TODO: Get nice names
+
+        self._tabulate_data()
+
+    def _tabulate_data(self):
+        data = self._object_display.get_data(*self._columns)
+
+        self.setData(data)
 
     def _header_section_clicked(self, index):
         menu = QMenu()

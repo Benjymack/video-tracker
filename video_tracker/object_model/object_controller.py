@@ -57,7 +57,10 @@ class ObjectController:
         return points
 
     def get_data(self, *args):
-        return self.get_current_object().get_data(*args)
+        current_object = self.get_current_object()
+        if current_object is None:
+            return None
+        return current_object.get_data(*args)
 
     def update(self):
         self._object_display.update()
