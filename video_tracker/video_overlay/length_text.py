@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import QGraphicsTextItem, QMessageBox
 from PyQt5.QtGui import QRegExpValidator
 from PyQt5.QtCore import QRegExp, Qt
 
+import re
+
 
 # Constants
 # Will accept a integer/decimal and a unit (any unit, including made-up ones are
@@ -64,4 +66,7 @@ class LengthText(QGraphicsTextItem):
             self.focus_in()
 
     def get_length_and_unit(self):
-        return 1.0, 'm'  # TODO: Get actual length
+        p = re.compile(LENGTH_REGEXP)
+        m = p.match(self.document().toPlainText())
+
+        return float(m.group(1)), m.group(3)

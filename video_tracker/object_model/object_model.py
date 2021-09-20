@@ -17,12 +17,16 @@ class ObjectModel:
         self._object_controller = object_controller
 
         self._available_measurements = {
+            't': (self._get_t, lambda: self._get_time_unit()),
             'x': (self._get_x, lambda: self._get_len_unit()),
             'y': (self._get_y, lambda: self._get_len_unit()),
         }
 
+    def _get_time_unit(self):
+        return 's'
+
     def _get_len_unit(self):
-        return 'm'  # TODO: Get actual length measurement
+        return self._object_controller.get_ruler_length()[2]
 
     def add_point(self, x, y, frame):
         if not isinstance(frame, int):
@@ -67,6 +71,12 @@ class ObjectModel:
             _, y = self._convert_to_true_position(*point)
             y_positions[time] = y
         return y_positions
+
+    def _get_t(self):
+        times = {}
+        for time in self._points.keys():
+            times[time] = time
+        return times
 
     def calculate_measurement(self, measurement):
         if measurement not in self._available_measurements:

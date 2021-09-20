@@ -36,6 +36,7 @@ class ObjectTable(TableWidget):
             menu.addAction(REMOVE_ACTION)
         menu.addAction(INSERT_RIGHT_ACTION)
 
+        # TODO: Account for when there is a scrollbar
         x = self.horizontalHeader().sectionPosition(index)
         y = self.horizontalHeader().height()
 
