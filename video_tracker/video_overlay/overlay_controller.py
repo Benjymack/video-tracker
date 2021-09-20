@@ -70,19 +70,23 @@ class OverlayController:
         """
         Pass the mouse movement down to any containing overlay items.
         """
+        anything_done = False
         for item in self._find_items_containing(event.scenePos()):
-            item.mouse_move(event)
+            anything_done |= item.mouse_move(event)
 
-        self.update(False)
+        if anything_done:
+            self.update(False)
 
     def _mouse_release(self, event):
         """
         Pass the mouse release down to any containing overlay items.
         """
+        anything_done = False
         for item in self._find_items_containing(event.scenePos()):
-            item.mouse_release(event)
+            anything_done |= item.mouse_release(event)
 
-        self.update(False)
+        if anything_done:
+            self.update(False)
 
     def get_ruler_length(self):
         return self._ruler.get_ruler_length()
