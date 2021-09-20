@@ -44,6 +44,9 @@ class ObjectController:
     def get_ruler_length(self):
         return self._overlay_controller.get_ruler_length()
 
+    def get_reference_angle(self):
+        return self._overlay_controller.get_reference_angle()
+
     def get_origin_pos(self):
         return self._overlay_controller.get_origin_pos()
 

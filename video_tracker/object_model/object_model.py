@@ -1,3 +1,7 @@
+# Imports
+from math import sin, cos, radians
+
+
 # Exceptions
 class InvalidMeasurementError(Exception):
     pass
@@ -30,14 +34,20 @@ class ObjectModel:
         return actual / pixels, unit
 
     def _convert_to_true_position(self, x, y):
-        # TODO: Account for reference angle
         origin_x, origin_y = self._object_controller.get_origin_pos()
 
         scale = self._get_scale_factor()[0]
 
-        true_x = scale * (x - origin_x)
-        true_y = scale * (origin_y - y)  # Opposite because in the widget,
-        # positive y is down
+        ref_angle = radians(self._object_controller.get_reference_angle())
+
+        move_x, move_y = x - origin_x, origin_y - y  # Opposite because in the
+        # widget, positive y is down
+
+        rot_x = cos(ref_angle) * move_x - sin(ref_angle) * move_y
+        rot_y = sin(ref_angle) * move_x + cos(ref_angle) * move_y
+
+        true_x = scale * rot_x
+        true_y = scale * rot_y
 
         return true_x, true_y
 
