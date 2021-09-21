@@ -1,7 +1,7 @@
 # Imports
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGraphicsScene, QGraphicsView, QGraphicsTextItem, QGraphicsLineItem
-from PyQt5.QtMultimediaWidgets import QVideoWidget, QGraphicsVideoItem
-from PyQt5.QtCore import QSizeF, Qt, QSize
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGraphicsView
+from PyQt5.QtMultimediaWidgets import QGraphicsVideoItem
+from PyQt5.QtCore import Qt, QSize
 
 try:
     from video_display.control_bar import ControlBar
@@ -41,6 +41,8 @@ class VideoDisplay(QWidget):
         self._layout.addWidget(self._view)
         self._layout.addWidget(self._control_bar)
         self.setLayout(self._layout)
+
+        self._layout.setContentsMargins(0, 0, 0, 0)
 
     def _native_size_changed(self, size):
         """

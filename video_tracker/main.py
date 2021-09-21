@@ -6,7 +6,7 @@
 #
 ############
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QSplitter
 
 import platform
 import ctypes
@@ -47,12 +47,11 @@ class MainWindow(QMainWindow):
         self._object_controller.initialise_display()
 
         # Display the video, etc
-        self._main_widget = QWidget()
+        self._main_widget = QSplitter()
+        self._main_widget.setContentsMargins(10, 10, 10, 10)
 
-        self._layout = QHBoxLayout()
-        self._layout.addWidget(self._video_controller.get_video_display())
-        self._layout.addWidget(self._object_controller.get_object_display())
-        self._main_widget.setLayout(self._layout)
+        self._main_widget.addWidget(self._video_controller.get_video_display())
+        self._main_widget.addWidget(self._object_controller.get_object_display())
 
         self.setCentralWidget(self._main_widget)
 
