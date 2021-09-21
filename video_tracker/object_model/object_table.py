@@ -18,11 +18,12 @@ class ObjectTable(TableWidget):
         self._object_display = object_display
 
         # Start with just time
-        self._columns = ['t']
+        self._columns = ['t', 'x', 'y']
 
         self.horizontalHeader().setSectionsMovable(True)
         self.horizontalHeader().setContextMenuPolicy(Qt.CustomContextMenu)
-        self.horizontalHeader().customContextMenuRequested.connect(self._header_section_clicked)
+        self.horizontalHeader().customContextMenuRequested.connect(
+            self._header_section_clicked)
         self.verticalHeader().hide()
 
         self.update()
@@ -32,7 +33,16 @@ class ObjectTable(TableWidget):
 
         self._tabulate_data()
 
-        self.setHorizontalHeaderLabels(self._columns)  # TODO: Get nice names
+        available_measurements = self._object_display. \
+            get_current_object_available_measurements()
+
+        if available_measurements == {}:
+            return
+
+        display_cols = [x + ' (' + available_measurements[x] + ')'
+                        if x != '' else '' for x in self._columns]
+
+        self.setHorizontalHeaderLabels(display_cols)
 
     def _tabulate_data(self):
         data = self._object_display.get_data(*self._columns)
@@ -53,17 +63,17 @@ class ObjectTable(TableWidget):
         index = self.horizontalHeader().logicalIndexAt(pos)
 
         if index < 0:  # The user didn't actually click on a column
-            return
+            return  # TODO: Add menu to add a particular type of column
 
         if index != 0:  # Can't delete the time column
             menu.addAction(REMOVE_ACTION)
         menu.addAction(INSERT_RIGHT_ACTION)
 
         # Choose a new column type
+        text_to_measurement = {}
         if index != 0:
             type_menu = QMenu(CHANGE_ACTION)
 
-            text_to_measurement = {}
             for measurement, unit in self._object_display. \
                     get_current_object_available_measurements().items():
                 text = measurement + ' (' + unit + ')'
@@ -86,7 +96,7 @@ class ObjectTable(TableWidget):
         if action_text == REMOVE_ACTION:
             del self._columns[index]
         elif action_text == INSERT_RIGHT_ACTION:
-            self._columns.insert(index+1, '')
+            self._columns.insert(index + 1, '')
         elif action_text in text_to_measurement:
             self._columns[index] = text_to_measurement[action_text]
 
