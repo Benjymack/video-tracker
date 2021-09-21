@@ -6,7 +6,7 @@
 #
 ############
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QSplitter
+from PyQt5.QtWidgets import QApplication, QMainWindow, QSplitter, QAction
 
 import platform
 import ctypes
@@ -56,13 +56,37 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self._main_widget)
 
         # Create a menubar
-        # self._menu_bar = self.menuBar()
-
-        # self._file_menu = self._menu_bar.addMenu('&File')
+        self._create_menu()
 
         # Open a video, only for example
         self._video_controller.open_video_file(VIDEO_FILE_PATH)
         # self._video_controller.play_pause_toggle()
+
+    def _create_actions(self):
+        self._new_action = QAction('&New')
+        self._open_action = QAction('&Open')
+        self._save_action = QAction('&Save')
+        self._save_as_action = QAction('Save &As')
+        self._import_action = QAction('&Import')
+        self._export_action = QAction('&Export')
+
+        self._undo_action = QAction('&Undo')
+        self._redo_action = QAction('&Redo')
+
+    def _create_menu(self):
+        self._create_actions()
+
+        self._menu_bar = self.menuBar()
+
+        self._file_menu = self._menu_bar.addMenu('&File')
+        self._file_menu.addActions((self._new_action, self._open_action))
+        self._file_menu.addSeparator()
+        self._file_menu.addActions((self._save_action, self._save_as_action))
+        self._file_menu.addSeparator()
+        self._file_menu.addActions((self._import_action, self._export_action))
+
+        self._edit_menu = self._menu_bar.addMenu('&Edit')
+        self._edit_menu.addActions((self._undo_action, self._redo_action))
 
 
 if __name__ == '__main__':
