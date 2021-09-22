@@ -1,8 +1,14 @@
 # Imports
 from pyqtgraph import PlotWidget
+import pyqtgraph
 
 from PyQt5.QtWidgets import QMenu
 from PyQt5.QtCore import QPoint
+
+
+# pyqtgraph configuration
+pyqtgraph.setConfigOption('background', 'w')  # White background
+pyqtgraph.setConfigOption('foreground', 'k')  # Black foreground
 
 
 # Classes
@@ -11,8 +17,6 @@ class ObjectGraph(PlotWidget):
         super().__init__()
 
         self._object_display = object_display
-
-        self.setBackground('w')
 
         self._y_measurement = None
         self._x_measurement = None

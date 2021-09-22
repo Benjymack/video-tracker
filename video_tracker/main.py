@@ -58,6 +58,9 @@ class MainWindow(QMainWindow):
         # Create a menubar
         self._create_menu()
 
+        # Set the title
+        self.setWindowTitle('Video Tracker')  # TODO: Come up with a better title
+
         # Open a video, only for example
         self._video_controller.open_video_file(VIDEO_FILE_PATH)
         # self._video_controller.play_pause_toggle()
@@ -67,8 +70,8 @@ class MainWindow(QMainWindow):
         self._open_action = QAction('&Open')
         self._save_action = QAction('&Save')
         self._save_as_action = QAction('Save &As')
-        self._import_action = QAction('&Import')
-        self._export_action = QAction('&Export')
+        self._import_action = QAction('&Import Video')
+        self._export_action = QAction('&Export Data')
 
         self._undo_action = QAction('&Undo')
         self._redo_action = QAction('&Redo')
