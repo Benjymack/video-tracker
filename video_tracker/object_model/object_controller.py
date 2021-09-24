@@ -2,9 +2,11 @@
 try:
     from object_model.object_model import ObjectModel
     from object_model.object_display import ObjectDisplay
+    from object_model.object_selector import ObjectSelector
 except ImportError:
     from object_model import ObjectModel
     from object_display import ObjectDisplay
+    from object_selector import ObjectSelector
 
 
 # Constants
@@ -19,17 +21,37 @@ class ObjectController:
         self._overlay_controller = overlay_controller
         self._video_controller = video_controller
 
+        self._current_object_id = 1
+
         self._object_display = ObjectDisplay(self)
+
+        self._object_selector = ObjectSelector(self)
+
+    def get_object_names(self):
+        object_names = [o.get_name() for o in self._objects]
+        return object_names
 
     def get_object_display(self):
         return self._object_display
 
+    def get_object_selector(self):
+        return self._object_selector
+
     def initialise_display(self):
         self._object_display.initialise_display()
 
+    def perform_update(self):
+        self._object_display.update()
+        self._object_selector.update()
+
     def create_object(self):
-        object_ = ObjectModel(self)
+        object_ = ObjectModel(self, name=str(self._current_object_id))
         self._objects.append(object_)
+
+        self._current_object_id += 1
+
+        self.perform_update()
+
         return object_
 
     def get_current_object(self):

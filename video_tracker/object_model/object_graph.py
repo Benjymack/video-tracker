@@ -68,7 +68,7 @@ class ObjectGraph(PlotWidget):
                 x.append(thing[self._x_measurement])
                 y.append(thing[self._y_measurement])
 
-        self._plot_data.setData(x, y)
+        self._plot_data.setData(x, y, symbol='o', symbolBrush='k')
 
     def _set_measurement(self, side, measurement):
         measurements = self._object_display. \

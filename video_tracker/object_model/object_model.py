@@ -10,17 +10,21 @@ class InvalidMeasurementError(Exception):
 # Classes
 class ObjectModel:
     # Model
-    def __init__(self, object_controller, points=None):
+    def __init__(self, object_controller, points=None, name=''):
         if points is None:
             points = {}
         self._points = points
         self._object_controller = object_controller
+        self._name = name
 
         self._available_measurements = {
             't': (self._get_t, lambda: self._get_time_unit()),
             'x': (self._get_x, lambda: self._get_len_unit()),
             'y': (self._get_y, lambda: self._get_len_unit()),
         }
+
+    def get_name(self):
+        return self._name
 
     def _get_time_unit(self):
         return 's'

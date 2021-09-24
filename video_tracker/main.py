@@ -6,7 +6,7 @@
 #
 ############
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QSplitter, QAction
+from PyQt5.QtWidgets import QApplication, QMainWindow, QSplitter, QAction, QWidget, QVBoxLayout
 
 import platform
 import ctypes
@@ -53,7 +53,14 @@ class MainWindow(QMainWindow):
         self._main_widget.addWidget(self._video_controller.get_video_display())
         self._main_widget.addWidget(self._object_controller.get_object_display())
 
-        self.setCentralWidget(self._main_widget)
+        self._main_container = QWidget()
+        self._layout = QVBoxLayout()
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.addWidget(self._object_controller.get_object_selector())
+        self._layout.addWidget(self._main_widget)
+        self._main_container.setLayout(self._layout)
+
+        self.setCentralWidget(self._main_container)
 
         # Create a menubar
         self._create_menu()
