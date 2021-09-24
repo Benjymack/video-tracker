@@ -29,7 +29,6 @@ class ObjectGraph(PlotWidget):
                 lambda event, n=name: self._axis_label_clicked(n, event)
 
         self._plot_data = self.plotItem.plot()
-        self._plot_data.setData([0, 1, 2], [0, 3, 2])
 
     def _axis_label_clicked(self, name, event):
         # Create the context menu to display the available measurements
