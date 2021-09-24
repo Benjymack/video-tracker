@@ -115,3 +115,9 @@ class OverlayController:
 
         if self._object_controller is not None:
             self._object_controller.update()
+
+    def set_ruler_visibility(self, visibility):
+        self._overlay_canvas.set_ruler_visibility(visibility)
+
+    def set_axes_visibility(self, visibility):
+        self._overlay_canvas.set_axes_visibility(visibility)

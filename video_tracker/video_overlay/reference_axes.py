@@ -113,6 +113,9 @@ class ReferenceAxes(QGraphicsItemGroup):
 
         :return: If the mouse press was over a handle.
         """
+        if not self.isVisible():
+            return False
+
         if self._x_angle_rect.sceneBoundingRect().contains(event.scenePos()):
             self._current_moved_point = 'anglex'
         elif self._y_angle_rect.sceneBoundingRect().contains(event.scenePos()):
@@ -132,6 +135,9 @@ class ReferenceAxes(QGraphicsItemGroup):
 
         :return: If a handle is actually selected.
         """
+        if not self.isVisible():
+            return False
+
         self._mouse_event(event)
 
         return self._current_moved_point is not None
@@ -142,6 +148,9 @@ class ReferenceAxes(QGraphicsItemGroup):
 
         :return: If a handle was selected.
         """
+        if not self.isVisible():
+            return False
+
         self._mouse_event(event)
 
         if self._current_moved_point in ('anglex', 'angley'):

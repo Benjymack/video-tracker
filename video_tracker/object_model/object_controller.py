@@ -27,7 +27,7 @@ class ObjectController:
 
         self._object_display = ObjectDisplay(self)
 
-        self._object_selector = ObjectSelector(self)
+        self._object_selector = ObjectSelector(self, self._overlay_controller)
 
     def get_object_names(self):
         object_names = [o.get_name() for o in self._objects]
@@ -48,7 +48,8 @@ class ObjectController:
         self._overlay_controller.update()
 
     def create_object(self):
-        object_ = ObjectModel(self, name=str(self._current_object_id))
+        object_ = ObjectModel(self,
+                              name='Object #'+str(self._current_object_id))
         self._objects.append(object_)
 
         self._current_object_id += 1

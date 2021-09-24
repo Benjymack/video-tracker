@@ -49,3 +49,9 @@ class OverlayCanvas(QGraphicsItemGroup):
                                             x + CROSS_LENGTH, y, self)
         horizontal_line.setPen(pen)
         self._points.append((vertical_line, horizontal_line))
+
+    def set_ruler_visibility(self, visibility):
+        self._ruler.setVisible(visibility)
+
+    def set_axes_visibility(self, visibility):
+        self._reference_axes.setVisible(visibility)

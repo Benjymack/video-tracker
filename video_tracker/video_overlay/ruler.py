@@ -93,6 +93,9 @@ class Ruler(QGraphicsItemGroup):
         """
         Select the closest handle if it is in range.
         """
+        if not self.isVisible():
+            return False
+
         event_x, event_y = event.scenePos().x(), event.scenePos().y()
 
         # Determine the closest moving point
@@ -126,6 +129,9 @@ class Ruler(QGraphicsItemGroup):
         """
         Moves the currently selected handle.
         """
+        if not self.isVisible():
+            return False
+
         self._mouse_event(event)
 
         return self._current_moving_pos != 0
@@ -134,6 +140,9 @@ class Ruler(QGraphicsItemGroup):
         """
         Stops selecting the currently selected handle.
         """
+        if not self.isVisible():
+            return False
+
         self._mouse_event(event)
 
         return_value = self._current_moving_pos != 0

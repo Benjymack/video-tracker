@@ -43,7 +43,6 @@ class MainWindow(QMainWindow):
         self._overlay_controller.set_object_controller(self._object_controller)
 
         self._object_controller.create_object()
-        self._object_controller.create_object()
 
         self._object_controller.initialise_display()
 
@@ -96,8 +95,8 @@ class MainWindow(QMainWindow):
         self._file_menu.addSeparator()
         self._file_menu.addActions((self._import_action, self._export_action))
 
-        self._edit_menu = self._menu_bar.addMenu('&Edit')
-        self._edit_menu.addActions((self._undo_action, self._redo_action))
+        # self._edit_menu = self._menu_bar.addMenu('&Edit')
+        # self._edit_menu.addActions((self._undo_action, self._redo_action))
 
 
 if __name__ == '__main__':
