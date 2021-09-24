@@ -21,6 +21,8 @@ class ObjectController:
         self._overlay_controller = overlay_controller
         self._video_controller = video_controller
 
+        self._current_object_name = None
+
         self._current_object_id = 1
 
         self._object_display = ObjectDisplay(self)
@@ -43,6 +45,7 @@ class ObjectController:
     def perform_update(self):
         self._object_display.update()
         self._object_selector.update()
+        self._overlay_controller.update()
 
     def create_object(self):
         object_ = ObjectModel(self, name=str(self._current_object_id))
@@ -54,10 +57,19 @@ class ObjectController:
 
         return object_
 
+    def set_current_object(self, object_name, perform_update=True):
+        self._current_object_name = object_name
+
+        if perform_update:
+            self.perform_update()
+
     def get_current_object(self):
-        try:
-            return self._objects[0]  # TODO: Properly determine the object
-        except IndexError:
+        if self._current_object_name is None:
+            return None
+        else:
+            for o in self._objects:
+                if o.get_name() == self._current_object_name:
+                    return o
             return None
 
     def track_current_object(self, x, y):

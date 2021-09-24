@@ -43,6 +43,7 @@ class MainWindow(QMainWindow):
         self._overlay_controller.set_object_controller(self._object_controller)
 
         self._object_controller.create_object()
+        self._object_controller.create_object()
 
         self._object_controller.initialise_display()
 
