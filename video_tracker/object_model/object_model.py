@@ -25,6 +25,9 @@ class ObjectModel:
             'vx': (self._get_vx, self._get_vel_unit),
             'vy': (self._get_vy, self._get_vel_unit),
             'v': (self._get_v, self._get_vel_unit),
+            'ax': (self._get_ax, self._get_acc_unit),
+            'ay': (self._get_ay, self._get_acc_unit),
+            'a': (self._get_a, self._get_acc_unit),
         }
 
     def get_name(self):
@@ -38,6 +41,9 @@ class ObjectModel:
 
     def _get_vel_unit(self):
         return self._get_len_unit() + '/' + self._get_time_unit()
+
+    def _get_acc_unit(self):
+        return self._get_vel_unit() + '^2'
 
     def add_point(self, x, y, frame):
         if not isinstance(frame, int):
@@ -90,49 +96,48 @@ class ObjectModel:
             r_positions[time] = sqrt(x**2 + y**2)
         return r_positions
 
-    def _get_vx(self):
-        vx_values = {}
-        prev_time, prev_x = None, None
-        for time, point in self._points.items():
-            x, _ = self._convert_to_true_position(*point)
-
-            if prev_time is None:
-                vx_values[time] = None
+    def _calculate_derivative(self, points):
+        d_values = {}
+        prev_time, prev_p = None, None
+        for time, p in points.items():
+            if prev_p is None:
+                d_values[time] = None
             else:
-                vx_values[time] = (x - prev_x)/(time - prev_time)
+                d_values[time] = (p - prev_p)/(time - prev_time)
 
-            prev_time, prev_x = time, x
-        return vx_values
+            prev_time, prev_p = time, p
+        return d_values
+
+    def _combine_values(self, x_points, y_points):
+        values = {}
+
+        for time, x in x_points.items():
+            y = y_points[time]
+
+            if x is None or y is None:
+                values[time] = None
+            else:
+                values[time] = sqrt(x**2 + y**2)
+
+        return values
+
+    def _get_vx(self):
+        return self._calculate_derivative(self._get_x())
 
     def _get_vy(self):
-        vy_values = {}
-        prev_time, prev_y = None, None
-        for time, point in self._points.items():
-            _, y = self._convert_to_true_position(*point)
-
-            if prev_time is None:
-                vy_values[time] = None
-            else:
-                vy_values[time] = (y - prev_y)/(time - prev_time)
-
-            prev_time, prev_y = time, y
-        return vy_values
+        return self._calculate_derivative(self._get_y())
 
     def _get_v(self):
-        v_values = {}
-        prev_time, prev_x, prev_y = None, None, None
-        for time, point in self._points.items():
-            x, y = self._convert_to_true_position(*point)
+        return self._combine_values(self._get_vx(), self._get_vy())
 
-            if prev_time is None:
-                v_values[time] = None
-            else:
-                vx = (x - prev_x)/(time - prev_time)
-                vy = (y - prev_y)/(time - prev_time)
-                v_values[time] = sqrt(vx**2 + vy**2)
+    def _get_ax(self):
+        return self._calculate_derivative(self._get_vx())
 
-            prev_time, prev_x, prev_y = time, x, y
-        return v_values
+    def _get_ay(self):
+        return self._calculate_derivative(self._get_vy())
+
+    def _get_a(self):
+        return self._combine_values(self._get_ax(), self._get_ay())
 
     def _get_t(self):
         times = {}
