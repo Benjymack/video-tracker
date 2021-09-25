@@ -1,5 +1,5 @@
 # Imports
-from math import sin, cos, radians
+from math import sin, cos, radians, sqrt
 
 
 # Exceptions
@@ -18,9 +18,13 @@ class ObjectModel:
         self._name = name
 
         self._available_measurements = {
-            't': (self._get_t, lambda: self._get_time_unit()),
-            'x': (self._get_x, lambda: self._get_len_unit()),
-            'y': (self._get_y, lambda: self._get_len_unit()),
+            't': (self._get_t, self._get_time_unit),
+            'x': (self._get_x, self._get_len_unit),
+            'y': (self._get_y, self._get_len_unit),
+            'r': (self._get_r, self._get_len_unit),
+            'vx': (self._get_vx, self._get_vel_unit),
+            'vy': (self._get_vy, self._get_vel_unit),
+            'v': (self._get_v, self._get_vel_unit),
         }
 
     def get_name(self):
@@ -31,6 +35,9 @@ class ObjectModel:
 
     def _get_len_unit(self):
         return self._object_controller.get_ruler_length()[2]
+
+    def _get_vel_unit(self):
+        return self._get_len_unit() + '/' + self._get_time_unit()
 
     def add_point(self, x, y, frame):
         if not isinstance(frame, int):
@@ -75,6 +82,57 @@ class ObjectModel:
             _, y = self._convert_to_true_position(*point)
             y_positions[time] = y
         return y_positions
+
+    def _get_r(self):
+        r_positions = {}
+        for time, point in self._points.items():
+            x, y = self._convert_to_true_position(*point)
+            r_positions[time] = sqrt(x**2 + y**2)
+        return r_positions
+
+    def _get_vx(self):
+        vx_values = {}
+        prev_time, prev_x = None, None
+        for time, point in self._points.items():
+            x, _ = self._convert_to_true_position(*point)
+
+            if prev_time is None:
+                vx_values[time] = None
+            else:
+                vx_values[time] = (x - prev_x)/(time - prev_time)
+
+            prev_time, prev_x = time, x
+        return vx_values
+
+    def _get_vy(self):
+        vy_values = {}
+        prev_time, prev_y = None, None
+        for time, point in self._points.items():
+            _, y = self._convert_to_true_position(*point)
+
+            if prev_time is None:
+                vy_values[time] = None
+            else:
+                vy_values[time] = (y - prev_y)/(time - prev_time)
+
+            prev_time, prev_y = time, y
+        return vy_values
+
+    def _get_v(self):
+        v_values = {}
+        prev_time, prev_x, prev_y = None, None, None
+        for time, point in self._points.items():
+            x, y = self._convert_to_true_position(*point)
+
+            if prev_time is None:
+                v_values[time] = None
+            else:
+                vx = (x - prev_x)/(time - prev_time)
+                vy = (y - prev_y)/(time - prev_time)
+                v_values[time] = sqrt(vx**2 + vy**2)
+
+            prev_time, prev_x, prev_y = time, x, y
+        return v_values
 
     def _get_t(self):
         times = {}

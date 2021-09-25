@@ -15,17 +15,23 @@ class MockReferenceAxes:
 
 
 class MockRuler:
-    def __init__(self):
-        pass
+    pass
+
+
+class MockMagnifyingGlass:
+    pass
 
 
 class MockOverlayCanvas:
-    def __init__(self):
+    def __init__(self, video_controller):
         self._reference_axes = MockReferenceAxes()
         self._ruler = MockRuler()
+        self._magnifying_glass = MockMagnifyingGlass()
 
         self.get_reference_axes = MagicMock(return_value=self._reference_axes)
         self.get_ruler = MagicMock(return_value=self._ruler)
+        self.get_magnifying_glass = MagicMock(
+            return_value=self._magnifying_glass)
 
 
 def create_test_controller():

@@ -1,5 +1,5 @@
 # Imports
-from PyQt5.QtWidgets import QMenu
+from PyQt5.QtWidgets import QMenu, QHeaderView
 from PyQt5.QtCore import QPoint, Qt
 from pyqtgraph import TableWidget
 
@@ -24,6 +24,7 @@ class ObjectTable(TableWidget):
         self.horizontalHeader().setContextMenuPolicy(Qt.CustomContextMenu)
         self.horizontalHeader().customContextMenuRequested.connect(
             self._header_section_clicked)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.verticalHeader().hide()
 
         self.update()
@@ -53,7 +54,9 @@ class ObjectTable(TableWidget):
             final_data = {}
 
             for time, data_line in data.items():
-                final_data[time] = [data_line[col] for col in self._columns]
+                final_data[time] = [
+                    data_line[col] if data_line[col] is not None
+                    else '' for col in self._columns]
 
         self.setData(final_data)
 

@@ -64,6 +64,9 @@ class ObjectGraph(PlotWidget):
         for time, thing in sorted(data.items()):
             if self._x_measurement in thing and \
                     self._y_measurement in thing:
+                if thing[self._x_measurement] is None or \
+                        thing[self._y_measurement] is None:
+                    continue
                 x.append(thing[self._x_measurement])
                 y.append(thing[self._y_measurement])
 
