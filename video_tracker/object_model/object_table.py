@@ -1,5 +1,5 @@
 # Imports
-from PyQt5.QtWidgets import QMenu, QHeaderView
+from PyQt5.QtWidgets import QMenu, QHeaderView, QAction
 from PyQt5.QtCore import QPoint, Qt
 from pyqtgraph import TableWidget
 
@@ -70,18 +70,29 @@ class ObjectTable(TableWidget):
 
         if index != 0:  # Can't delete the time column
             menu.addAction(REMOVE_ACTION)
-        menu.addAction(INSERT_RIGHT_ACTION)
+
+        action_to_measurement_type = {}
+
+        insert_menu = QMenu(INSERT_RIGHT_ACTION)
+        for measurement, unit in self._object_display. \
+            get_current_object_available_measurements().items():
+            text = measurement + ' (' + unit + ')'
+            action = QAction(text)
+            action_to_measurement_type[action] = (measurement, 'new')
+            insert_menu.addAction(action)
+
+        menu.addMenu(insert_menu)
 
         # Choose a new column type
-        text_to_measurement = {}
         if index != 0:
             type_menu = QMenu(CHANGE_ACTION)
 
             for measurement, unit in self._object_display. \
                     get_current_object_available_measurements().items():
                 text = measurement + ' (' + unit + ')'
-                text_to_measurement[text] = measurement
-                type_menu.addAction(text)
+                action = QAction(text)
+                action_to_measurement_type[action] = (measurement, 'same')
+                type_menu.addAction(action)
 
             menu.addMenu(type_menu)
 
@@ -98,9 +109,11 @@ class ObjectTable(TableWidget):
 
         if action_text == REMOVE_ACTION:
             del self._columns[index]
-        elif action_text == INSERT_RIGHT_ACTION:
-            self._columns.insert(index + 1, '')
-        elif action_text in text_to_measurement:
-            self._columns[index] = text_to_measurement[action_text]
+        elif action in action_to_measurement_type:
+            if action_to_measurement_type[action][1] == 'new':
+                self._columns.insert(index + 1,
+                                     action_to_measurement_type[action][0])
+            else:  # Same
+                self._columns[index] = action_to_measurement_type[action][0]
 
         self.update()
