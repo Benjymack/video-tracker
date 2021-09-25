@@ -100,7 +100,6 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
-    # QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     make_dpi_aware()
 
     app = QApplication([])

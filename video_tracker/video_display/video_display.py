@@ -1,7 +1,7 @@
 # Imports
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGraphicsView
 from PyQt5.QtMultimediaWidgets import QGraphicsVideoItem
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt, QSize, QRectF
 
 try:
     from video_display.control_bar import ControlBar
@@ -19,8 +19,6 @@ class VideoDisplay(QWidget):
     # This would be a view
     def __init__(self):
         super().__init__()
-
-        # Based off: https://stackoverflow.com/a/57842233
 
         # Create the video
         self._video_widget = QGraphicsVideoItem()
@@ -56,6 +54,8 @@ class VideoDisplay(QWidget):
         size.scale(SIZE_HINT.width(), SIZE_HINT.height(), Qt.KeepAspectRatio)
         self._video_widget.setSize(size)
         self.resizeEvent(None)
+
+        self._scene.setSceneRect(QRectF(0, 0, size.width(), size.height()))
 
     def add_overlay(self, overlay, mouse_press, mouse_move, mouse_release):
         """

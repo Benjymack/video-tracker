@@ -15,16 +15,18 @@ class OverlayController:
         self._object_controller = None
 
         # Create the overlay canvas
-        self._overlay_canvas = overlay_canvas()
+        self._overlay_canvas = overlay_canvas(video_controller)
         video_controller.add_overlay(self._overlay_canvas, self._mouse_press,
                                      self._mouse_move, self._mouse_release)
 
         self._reference_axes = self._overlay_canvas.get_reference_axes()
         self._ruler = self._overlay_canvas.get_ruler()
+        self._magnifying_glass = self._overlay_canvas.get_magnifying_glass()
 
         self._overlay_items = (
             self._reference_axes,
             self._ruler,
+            self._magnifying_glass,
         )
 
     def get_origin_pos(self):
@@ -48,9 +50,7 @@ class OverlayController:
         :return: A generator of the items that contain the position.
         """
         for item in self._overlay_items:
-            if item.sceneBoundingRect().isEmpty() or \
-                    item.sceneBoundingRect().contains(pos):
-                yield item
+            yield item
 
     def _mouse_press(self, event):
         """
