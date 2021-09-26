@@ -66,3 +66,6 @@ class OverlayCanvas(QGraphicsItemGroup):
 
     def set_axes_visibility(self, visibility):
         self._reference_axes.setVisible(visibility)
+
+    def set_zoom_visibility(self, visibility):
+        self._magnifying_glass.setVisible(visibility)

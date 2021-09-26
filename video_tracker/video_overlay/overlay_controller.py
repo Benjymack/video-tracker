@@ -121,3 +121,6 @@ class OverlayController:
 
     def set_axes_visibility(self, visibility):
         self._overlay_canvas.set_axes_visibility(visibility)
+
+    def set_zoom_visibility(self, visibility):
+        self._overlay_canvas.set_zoom_visibility(visibility)

@@ -39,6 +39,13 @@ class ObjectSelector(QToolBar):
         self._axes_action.setChecked(True)
         self.addAction(self._axes_action)
 
+        self._zoom_action = QAction('Magnifying Glass')
+        self._zoom_action.setCheckable(True)
+        self._zoom_action.toggled.connect(
+            self._overlay_controller.set_zoom_visibility)
+        self._zoom_action.setChecked(True)
+        self.addAction(self._zoom_action)
+
     def _create_object(self, triggered):
         self._object_controller.create_object()
 
