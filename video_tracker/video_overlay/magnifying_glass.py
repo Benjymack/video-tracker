@@ -1,7 +1,7 @@
 # Imports
 from PyQt5.QtWidgets import QGraphicsPixmapItem, QStyleOptionGraphicsItem
-from PyQt5.QtGui import QPixmap, QPainter
-from PyQt5.QtCore import Qt, QPointF
+from PyQt5.QtGui import QPixmap, QPainter, QPainterPath
+from PyQt5.QtCore import Qt, QPointF, QRectF
 
 
 # Constants
@@ -17,19 +17,11 @@ class MagnifyingGlass(QGraphicsPixmapItem):
 
         self._video_widget = video_widget
 
-        # self._pixmap = QPixmap(WIDTH * SCALE_FACTOR, HEIGHT * SCALE_FACTOR)
-        # self._pixmap.fill(Qt.transparent)
-        #
-        # self._painter = QPainter(self._pixmap)
-        # self._painter.scale(SCALE_FACTOR, SCALE_FACTOR)
-        # self._painter.drawLine(0, 0, 100, 100)
-        #
-        # self._video_widget.paint(self._painter, QStyleOptionGraphicsItem())
-        print('Painting')
-
         self._x, self._y = 0, 0
 
-        # self.setPixmap(self._pixmap)
+        ellipse_rect = QRectF(0, 0, WIDTH * SCALE_FACTOR, HEIGHT * SCALE_FACTOR)
+        self._path = QPainterPath()
+        self._path.addEllipse(ellipse_rect)
 
     def mouse_press(self, event):
         return False
@@ -39,6 +31,7 @@ class MagnifyingGlass(QGraphicsPixmapItem):
         pixmap.fill(Qt.transparent)
 
         painter = QPainter(pixmap)
+        painter.setClipPath(self._path, Qt.IntersectClip)
         painter.scale(SCALE_FACTOR, SCALE_FACTOR)
         painter.translate(-self._x, -self._y)
         self._video_widget.paint(painter, QStyleOptionGraphicsItem())
