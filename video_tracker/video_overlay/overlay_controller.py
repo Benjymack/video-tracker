@@ -22,6 +22,7 @@ class OverlayController:
                                            self._mouse_release)
 
         self._reference_axes = self._overlay_canvas.get_reference_axes()
+        self._reference_axes.register_controller(self)
         self._ruler = self._overlay_canvas.get_ruler()
         self._magnifying_glass = self._overlay_canvas.get_magnifying_glass()
 
@@ -32,6 +33,7 @@ class OverlayController:
         )
 
         self._auto_increment = False
+        self._toolbar = None
 
     def get_origin_pos(self):
         """
@@ -45,6 +47,16 @@ class OverlayController:
         (0-360 degrees going counter-clockwise from right horizontal).
         """
         return self._reference_axes.get_reference_angle()
+
+    def set_reference_angle(self, angle):
+        self._reference_axes.set_reference_angle(angle)
+
+    def update_reference_angle(self, angle):
+        if self._toolbar is not None:
+            self._toolbar.update_reference_angle(angle)
+
+    def register_toolbar(self, toolbar):
+        self._toolbar = toolbar
 
     def _find_items_containing(self, pos):
         """

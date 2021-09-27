@@ -57,6 +57,11 @@ class ReferenceAxes(QGraphicsItemGroup):
         self._reference_pos = QPointF(0, 0)
         self._reference_angle = 0
 
+        self._overlay_controller = None
+
+    def register_controller(self, overlay_controller):
+        self._overlay_controller = overlay_controller
+
     def get_origin_pos(self):
         """
         Returns the position of the origin in pixels.
@@ -68,6 +73,13 @@ class ReferenceAxes(QGraphicsItemGroup):
         Returns the reference angle (degrees).
         """
         return self._reference_angle
+
+    def set_reference_angle(self, angle):
+        self._reference_angle = angle
+        self.setRotation(self._reference_angle)
+
+        if self._overlay_controller is not None:
+            self._overlay_controller.update_reference_angle(-angle)
 
     def _move_origin_to(self, pos):
         """
@@ -90,8 +102,7 @@ class ReferenceAxes(QGraphicsItemGroup):
 
         angle = math.degrees(math.atan2(dy, dx)) + offset_angle
 
-        self._reference_angle = angle
-        self.setRotation(self._reference_angle)
+        self.set_reference_angle(angle)
 
         return math.sqrt(dx ** 2 + dy ** 2)
 

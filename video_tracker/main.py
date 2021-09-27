@@ -75,6 +75,8 @@ class MainWindow(QMainWindow):
             caption='Import Video',
             filter='Video Files (*.avi *.mov *.mp4);;All Files (*.*)')
         self._video_controller.open_video_file(file_name)
+        self._video_controller.play_pause_toggle()
+        self._video_controller.play_pause_toggle()
 
     def _create_actions(self):
         self._new_action = QAction('&New')

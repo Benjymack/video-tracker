@@ -1,5 +1,6 @@
 # Imports
-from PyQt5.QtWidgets import QToolBar, QComboBox, QAction
+from PyQt5.QtWidgets import QToolBar, QComboBox, QAction, QLineEdit
+from PyQt5.QtGui import QDoubleValidator
 
 
 # Classes
@@ -9,21 +10,23 @@ class ObjectSelector(QToolBar):
 
         self._object_controller = object_controller
         self._overlay_controller = overlay_controller
+        self._overlay_controller.register_toolbar(self)
 
         self._ignore_change = False
 
         self._create_actions()
 
-        self._object_list = QComboBox()
-        self._object_list.currentTextChanged.connect(self._text_changed)
-        self._update_object_names()
-
-        self.addWidget(self._object_list)
-
     def _create_actions(self):
         self._new_object_action = QAction('New Object')
         self._new_object_action.triggered.connect(self._create_object)
         self.addAction(self._new_object_action)
+
+        self._object_list = QComboBox()
+        self._object_list.currentTextChanged.connect(self._text_changed)
+        self._update_object_names()
+        self.addWidget(self._object_list)
+
+        self.addSeparator()
 
         self._ruler_action = QAction('Calibration Ruler')
         self._ruler_action.setCheckable(True)
@@ -39,6 +42,14 @@ class ObjectSelector(QToolBar):
         self._axes_action.setChecked(True)
         self.addAction(self._axes_action)
 
+        self._axes_angle = QLineEdit()
+        double_validator = QDoubleValidator()
+        self._axes_angle.setValidator(double_validator)
+        self._axes_angle.setFixedWidth(75)
+        self._axes_angle.editingFinished.connect(self._set_reference_angle)
+        self._axes_angle.setText('0.0')
+        self.addWidget(self._axes_angle)
+
         self._zoom_action = QAction('Magnifying Glass')
         self._zoom_action.setCheckable(True)
         self._zoom_action.toggled.connect(
@@ -52,6 +63,14 @@ class ObjectSelector(QToolBar):
             self._overlay_controller.set_auto_increment)
         self._inc_action.setChecked(True)
         self.addAction(self._inc_action)
+
+    def _set_reference_angle(self):
+        angle = round(float(self._axes_angle.text()), 2)
+        self._overlay_controller.set_reference_angle(-angle)
+        self._axes_angle.setText(str(angle))
+
+    def update_reference_angle(self, angle):
+        self._axes_angle.setText(str(round(angle, 2)))
 
     def _create_object(self, triggered):
         self._object_controller.create_object()
