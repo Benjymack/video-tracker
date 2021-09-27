@@ -13,11 +13,13 @@ class OverlayController:
     # Controller
     def __init__(self, video_controller, overlay_canvas=OverlayCanvas):
         self._object_controller = None
+        self._video_controller = video_controller
 
         # Create the overlay canvas
-        self._overlay_canvas = overlay_canvas(video_controller)
-        video_controller.add_overlay(self._overlay_canvas, self._mouse_press,
-                                     self._mouse_move, self._mouse_release)
+        self._overlay_canvas = overlay_canvas(self._video_controller)
+        self._video_controller.add_overlay(self._overlay_canvas,
+                                           self._mouse_press, self._mouse_move,
+                                           self._mouse_release)
 
         self._reference_axes = self._overlay_canvas.get_reference_axes()
         self._ruler = self._overlay_canvas.get_ruler()
@@ -28,6 +30,8 @@ class OverlayController:
             self._ruler,
             self._magnifying_glass,
         )
+
+        self._auto_increment = False
 
     def get_origin_pos(self):
         """
@@ -63,8 +67,15 @@ class OverlayController:
 
         if not anything_done and event.button() == Qt.LeftButton and \
                 self._object_controller is not None:
+            # Track the object
             self._object_controller.track_current_object(event.scenePos().x(), event.scenePos().y())
+
+            # Update the overlay
             self.update()
+
+            # Increment the video if applicable
+            if self._auto_increment:
+                self._video_controller.increment_position()
 
         if anything_done:
             self.update(False)
@@ -124,3 +135,6 @@ class OverlayController:
 
     def set_zoom_visibility(self, visibility):
         self._overlay_canvas.set_zoom_visibility(visibility)
+
+    def set_auto_increment(self, value):
+        self._auto_increment = value

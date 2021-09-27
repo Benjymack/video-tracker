@@ -46,6 +46,13 @@ class ObjectSelector(QToolBar):
         self._zoom_action.setChecked(True)
         self.addAction(self._zoom_action)
 
+        self._inc_action = QAction('Auto-Increment')
+        self._inc_action.setCheckable(True)
+        self._inc_action.toggled.connect(
+            self._overlay_controller.set_auto_increment)
+        self._inc_action.setChecked(True)
+        self.addAction(self._inc_action)
+
     def _create_object(self, triggered):
         self._object_controller.create_object()
 

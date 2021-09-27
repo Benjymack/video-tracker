@@ -6,7 +6,8 @@
 #
 ############
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QSplitter, QAction, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QSplitter, QAction, \
+    QWidget, QVBoxLayout, QFileDialog
 
 import platform
 import ctypes
@@ -14,7 +15,6 @@ import ctypes
 from video_display import VideoController
 from video_overlay import OverlayController
 from object_model import ObjectController
-
 
 # Constants
 VIDEO_FILE_PATH = 'tests/example_videos/video1.mp4'
@@ -51,7 +51,8 @@ class MainWindow(QMainWindow):
         self._main_widget.setContentsMargins(10, 10, 10, 10)
 
         self._main_widget.addWidget(self._video_controller.get_video_display())
-        self._main_widget.addWidget(self._object_controller.get_object_display())
+        self._main_widget.addWidget(
+            self._object_controller.get_object_display())
 
         self._main_container = QWidget()
         self._layout = QVBoxLayout()
@@ -66,18 +67,24 @@ class MainWindow(QMainWindow):
         self._create_menu()
 
         # Set the title
-        self.setWindowTitle('Video Tracker')  # TODO: Come up with a better title
+        self.setWindowTitle(
+            'Video Tracker')  # TODO: Come up with a better title
 
-        # Open a video, only for example
-        self._video_controller.open_video_file(VIDEO_FILE_PATH)
-        # self._video_controller.play_pause_toggle()
+    def _open_video(self, checked):
+        file_name, _ = QFileDialog.getOpenFileName(
+            caption='Import Video',
+            filter='Video Files (*.avi *.mov *.mp4);;All Files (*.*)')
+        self._video_controller.open_video_file(file_name)
 
     def _create_actions(self):
         self._new_action = QAction('&New')
         self._open_action = QAction('&Open')
+
         self._save_action = QAction('&Save')
         self._save_as_action = QAction('Save &As')
+
         self._import_action = QAction('&Import Video')
+        self._import_action.triggered.connect(self._open_video)
         self._export_action = QAction('&Export Data')
 
         self._undo_action = QAction('&Undo')
@@ -89,10 +96,10 @@ class MainWindow(QMainWindow):
         self._menu_bar = self.menuBar()
 
         self._file_menu = self._menu_bar.addMenu('&File')
-        self._file_menu.addActions((self._new_action, self._open_action))
-        self._file_menu.addSeparator()
-        self._file_menu.addActions((self._save_action, self._save_as_action))
-        self._file_menu.addSeparator()
+        # self._file_menu.addActions((self._new_action, self._open_action))
+        # self._file_menu.addSeparator()
+        # self._file_menu.addActions((self._save_action, self._save_as_action))
+        # self._file_menu.addSeparator()
         self._file_menu.addActions((self._import_action, self._export_action))
 
         # self._edit_menu = self._menu_bar.addMenu('&Edit')
