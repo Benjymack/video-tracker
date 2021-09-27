@@ -35,7 +35,6 @@ class MagnifyingGlass(QGraphicsPixmapItem):
         painter.scale(SCALE_FACTOR, SCALE_FACTOR)
         painter.translate(-self._x, -self._y)
         self._video_widget.paint(painter, QStyleOptionGraphicsItem())
-        # painter.drawLine(0, 0, 100, 100)
         self.setPixmap(pixmap)
         painter.end()
 
