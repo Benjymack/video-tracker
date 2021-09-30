@@ -45,13 +45,13 @@ class VideoPlayer:
         self._media_info = MediaInfo.parse(video_file)
         self._process_media_info()
 
-    def initialise_display(self, video_display):
+    def initialise_display(self, video_widget):
         """
         Sets the output of the video player to be the provided display.
 
-        :param video_display: The display for the video
+        :param video_widget: The display for the video
         """
-        self._media_player.setVideoOutput(video_display)
+        self._media_player.setVideoOutput(video_widget)
 
     def toggle_play_state(self):
         """

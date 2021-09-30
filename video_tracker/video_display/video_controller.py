@@ -39,6 +39,26 @@ class VideoController:
         """
         return self._video_display
 
+    def get_video_widget(self):
+        """
+        Returns the video widget.
+        """
+        return self._video_display.get_video_widget()
+
+    def add_overlay(self, overlay, mouse_press, mouse_move, mouse_release):
+        """
+        Adds an overlay to the video display, as well as binding the mouse
+        press, movement and release events to the provided functions.
+
+        :param overlay: The overlay (QGraphicsItem) to add
+        :param mouse_press: Function for when the mouse is pressed on the scene.
+        :param mouse_move: Function for when the mouse is moved on the scene.
+        :param mouse_release: Function for when the mouse is released on the
+        scene.
+        """
+        self._video_display.add_overlay(overlay, mouse_press, mouse_move,
+                                        mouse_release)
+
     def open_video_file(self, video_file):
         """
         Opens a video file, and displays it.
@@ -68,7 +88,7 @@ class VideoController:
         """
         Changes the duration of the video.
 
-        :param new_duration: The new duration of the video
+        :param new_duration: The new duration of the video (ms)
         """
         print('Duration changed to:', new_duration)
         self._video_display.set_duration(new_duration)
@@ -190,6 +210,9 @@ class VideoController:
         self._change_position(-self._skip_amount, self._unit)
 
     def set_unit(self, new_unit):
+        """
+        Sets the current unit to be the one specified (frames, ms)
+        """
         if new_unit not in ('frames', 'ms'):  # TODO: Move this into a constant
             raise UnknownUnitError('Unit %s is unknown' % new_unit)
 
@@ -203,4 +226,7 @@ class VideoController:
         self._video_player.set_update_interval(interval)
 
     def get_unit(self):
+        """
+        Returns the current unit.
+        """
         return self._unit
