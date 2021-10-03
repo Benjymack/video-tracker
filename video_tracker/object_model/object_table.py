@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QMenu, QHeaderView, QAction
 from PyQt5.QtCore import QPoint, Qt
 from pyqtgraph import TableWidget
 
-
 # Constants
 REMOVE_ACTION = 'Remove column'
 INSERT_RIGHT_ACTION = 'Insert new column to right'
@@ -85,7 +84,7 @@ class ObjectTable(TableWidget):
 
         insert_menu = QMenu(INSERT_RIGHT_ACTION)
         for measurement, unit in self._object_display. \
-            get_current_object_available_measurements().items():
+                get_current_object_available_measurements().items():
             text = measurement + ' (' + unit + ')'
             action = QAction(text)
             action_to_measurement_type[action] = (measurement, 'new')

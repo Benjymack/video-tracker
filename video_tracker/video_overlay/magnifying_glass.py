@@ -23,9 +23,6 @@ class MagnifyingGlass(QGraphicsPixmapItem):
         self._path = QPainterPath()
         self._path.addEllipse(ellipse_rect)
 
-    def mouse_press(self, event):
-        return False
-
     def update_image(self):
         """
         Updates the image that the magnifying glass displays.
@@ -59,6 +56,9 @@ class MagnifyingGlass(QGraphicsPixmapItem):
 
         self.setPos(QPointF(x - width/2, y - height/2))
 
+        return False
+
+    def mouse_press(self, event):
         return False
 
     def mouse_release(self, event):

@@ -27,6 +27,7 @@ class ObjectController:
 
         self._object_display = ObjectDisplay(self)
 
+        # TODO: Change where object selector is
         self._object_selector = ObjectSelector(self, self._overlay_controller)
 
     def get_object_names(self):
@@ -151,5 +152,8 @@ class ObjectController:
             return None
         return current_object.get_data(*args)
 
-    def update(self):
+    def update(self):  # TODO: Reconcile the perform_update and update methods.
+        """
+        Updates the object controller.
+        """
         self._object_display.update()

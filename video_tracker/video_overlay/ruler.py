@@ -123,7 +123,7 @@ class Ruler(QGraphicsItemGroup):
         self._mouse_event(event)
 
         return self._current_moving_pos != 0 or \
-               self._length_text.hasFocus() or length_text_had_focus
+            self._length_text.hasFocus() or length_text_had_focus
 
     def mouse_move(self, event):
         """
@@ -152,8 +152,12 @@ class Ruler(QGraphicsItemGroup):
         return return_value
 
     def get_ruler_length(self):
-        pixel_distance = math.sqrt((self._pos1.x() - self._pos2.x())**2 +
-                                   (self._pos1.y() - self._pos2.y())**2)
+        """
+        Returns the pixel length of the ruler,
+        as well as the user-specified length and unit.
+        """
+        pixel_distance = math.sqrt((self._pos1.x() - self._pos2.x()) ** 2 +
+                                   (self._pos1.y() - self._pos2.y()) ** 2)
 
         length, unit = self._length_text.get_length_and_unit()
 

@@ -138,13 +138,6 @@ class ObjectModel:
             y_positions[time] = y
         return y_positions
 
-    def _get_r(self):
-        r_positions = {}
-        for time, point in self._points.items():
-            x, y = self._convert_to_true_position(*point)
-            r_positions[time] = sqrt(x**2 + y**2)
-        return r_positions
-
     def _calculate_derivative(self, points):
         """
         Calculates and returns the derivative (or at least approximates it),
@@ -162,7 +155,7 @@ class ObjectModel:
             if prev_p is None:
                 d_values[time] = None
             else:
-                d_values[time] = (p - prev_p)/(time - prev_time)
+                d_values[time] = (p - prev_p) / (time - prev_time)
 
             prev_time, prev_p = time, p
         return d_values
@@ -184,9 +177,15 @@ class ObjectModel:
             if x is None or y is None:
                 values[time] = None
             else:
-                values[time] = sqrt(x**2 + y**2)
+                values[time] = sqrt(x ** 2 + y ** 2)
 
         return values
+
+    def _get_r(self):
+        """
+        Returns the magnitude of the positions.
+        """
+        return self._combine_values(self._get_x(), self._get_y())
 
     def _get_vx(self):
         """
@@ -246,7 +245,10 @@ class ObjectModel:
         return self._available_measurements[measurement][0]()
 
     def get_available_measurements(self):
-        return {key: value[1]() for key, value in \
+        """
+        Returns all of the available measurements, and their units.
+        """
+        return {key: value[1]() for key, value in
                 self._available_measurements.items()}
 
     def get_data(self, *args):

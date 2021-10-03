@@ -81,7 +81,6 @@ class VideoController:
 
         :param new_state: The new state of the video
         """
-        print('State changed to:', new_state)
         self._video_display.set_media_state(new_state)
 
     def duration_changed(self, new_duration):
@@ -90,7 +89,6 @@ class VideoController:
 
         :param new_duration: The new duration of the video (ms)
         """
-        print('Duration changed to:', new_duration)
         self._video_display.set_duration(new_duration)
 
     def position_changed(self, new_position):
