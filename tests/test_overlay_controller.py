@@ -12,6 +12,7 @@ class MockVideoController:
 class MockReferenceAxes:
     def __init__(self):
         self.get_origin_pos = MagicMock()
+        self.register_controller = MagicMock()
 
 
 class MockRuler:
