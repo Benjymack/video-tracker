@@ -30,20 +30,36 @@ class ObjectDisplay(QSplitter):
         self.setSizes([1, equal_height])
 
     def get_current_object(self):
+        """
+        Returns the current object from the object controller.
+        """
         return self._object_controller.get_current_object()
 
     def get_current_object_available_measurements(self):
+        """
+        Returns a list of the current measurements and their units from the
+        current object.
+        """
         current_object = self.get_current_object()
         if current_object is None:
             return {}
         return current_object.get_available_measurements()
 
     def initialise_display(self):
+        """
+        Initialises the graph and table.
+        """
         self._object_graph.initialise_graph()
 
     def get_data(self, *args):
+        """
+        Returns the data from the object controller.
+        """
         return self._object_controller.get_data(*args)
 
     def update(self):
+        """
+        Updates the graph and table.
+        """
         self._object_graph.update()
         self._object_table.update()

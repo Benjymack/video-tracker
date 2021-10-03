@@ -30,6 +30,9 @@ class ObjectTable(TableWidget):
         self.update()
 
     def update(self):
+        """
+        Update the column names, and retabulate the data.
+        """
         self.setColumnCount(len(self._columns))
 
         self._tabulate_data()
@@ -46,6 +49,9 @@ class ObjectTable(TableWidget):
         self.setHorizontalHeaderLabels(display_cols)
 
     def _tabulate_data(self):
+        """
+        Get data from the object display, and put it into the table.
+        """
         data = self._object_display.get_data(*self._columns)
 
         if data is None:
@@ -61,6 +67,10 @@ class ObjectTable(TableWidget):
         self.setData(final_data)
 
     def _header_section_clicked(self, pos):
+        """
+        Show the context menu for when a header is clicked,
+        and perform the action that the user chooses.
+        """
         menu = QMenu()
 
         index = self.horizontalHeader().logicalIndexAt(pos)

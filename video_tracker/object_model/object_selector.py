@@ -17,6 +17,9 @@ class ObjectSelector(QToolBar):
         self._create_actions()
 
     def _create_actions(self):
+        """
+        Create and display all of the toolbar actions.
+        """
         self._new_object_action = QAction('New Object')
         self._new_object_action.triggered.connect(self._create_object)
         self.addAction(self._new_object_action)
@@ -65,17 +68,32 @@ class ObjectSelector(QToolBar):
         self.addAction(self._inc_action)
 
     def _set_reference_angle(self):
+        """
+        Sets the reference angle to the one in the textbox.
+        """
         angle = round(float(self._axes_angle.text()), 2)
         self._overlay_controller.set_reference_angle(-angle)
         self._axes_angle.setText(str(angle))
 
     def update_reference_angle(self, angle):
+        """
+        Changes the textbox to be the given angle.
+
+        :param angle: The angle (deg) to set the angle textbox to.
+        """
         self._axes_angle.setText(str(round(angle, 2)))
 
     def _create_object(self, triggered):
+        """
+        Creates a new object in the object controller.
+        """
         self._object_controller.create_object()
 
     def _update_object_names(self):
+        """
+        Updates all of the available objects in the combobox to match the ones
+        in the object controller.
+        """
         self._ignore_change = True
         current_object = self._object_list.currentText()
         self._object_list.clear()
@@ -94,8 +112,16 @@ class ObjectSelector(QToolBar):
             self._object_controller.set_current_object(object_names[0], False)
 
     def update(self):
+        """
+        Updates the toolbar.
+        """
         self._update_object_names()
 
     def _text_changed(self, new_text):
+        """
+        Sets the current object to the new text.
+
+        :param new_text: The name of the current object to set.
+        """
         if not self._ignore_change:
             self._object_controller.set_current_object(new_text)

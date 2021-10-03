@@ -66,6 +66,10 @@ class LengthText(QGraphicsTextItem):
             self.focus_in()
 
     def get_length_and_unit(self):
+        """
+        Returns the user-specified length of the ruler,
+        and the unit of that length.
+        """
         p = re.compile(LENGTH_REGEXP)
         m = p.match(self.document().toPlainText())
 

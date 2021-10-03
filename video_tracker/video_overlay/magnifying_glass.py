@@ -27,6 +27,9 @@ class MagnifyingGlass(QGraphicsPixmapItem):
         return False
 
     def update_image(self):
+        """
+        Updates the image that the magnifying glass displays.
+        """
         pixmap = QPixmap(WIDTH * SCALE_FACTOR, HEIGHT * SCALE_FACTOR)
         pixmap.fill(Qt.transparent)
 
@@ -39,6 +42,12 @@ class MagnifyingGlass(QGraphicsPixmapItem):
         painter.end()
 
     def mouse_move(self, event):
+        """
+        Updates the position and the image of the magnifying glass.
+
+        :param event: The QEvent that contains the position of
+        the mouse movement.
+        """
         x, y = event.scenePos().x(), event.scenePos().y()
 
         width = self.boundingRect().width()

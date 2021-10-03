@@ -60,6 +60,10 @@ class ReferenceAxes(QGraphicsItemGroup):
         self._overlay_controller = None
 
     def register_controller(self, overlay_controller):
+        """
+        Registers an overlay controller,
+        for updating the reference angle when it is changed.
+        """
         self._overlay_controller = overlay_controller
 
     def get_origin_pos(self):
@@ -75,6 +79,9 @@ class ReferenceAxes(QGraphicsItemGroup):
         return self._reference_angle
 
     def set_reference_angle(self, angle):
+        """
+        Sets the reference angle to the specified one (degrees).
+        """
         self._reference_angle = angle
         self.setRotation(self._reference_angle)
 

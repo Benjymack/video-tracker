@@ -31,6 +31,12 @@ class ObjectGraph(PlotWidget):
         self._plot_data = self.plotItem.plot()
 
     def _axis_label_clicked(self, name, event):
+        """
+        Display a context menu to change/add a header.
+
+        :param name: The name of the measurement whose axis was clicked.
+        :param event: The event associated with the click.
+        """
         # Create the context menu to display the available measurements
         menu = QMenu()
         text_to_measurement = {}
@@ -52,6 +58,9 @@ class ObjectGraph(PlotWidget):
             self._set_measurement(name, selected)
 
     def _replot_data(self):
+        """
+        Replots all of the data in the graph.
+        """
         if self._y_measurement is None or self._x_measurement is None:
             return
 
@@ -73,6 +82,13 @@ class ObjectGraph(PlotWidget):
         self._plot_data.setData(x, y, symbol='o', symbolBrush='k')
 
     def _set_measurement(self, side, measurement):
+        """
+        Sets the measurement that will be used on a particular axis of
+        the graph. Also triggers a replot of the data.
+
+        :param side: Which axis to change (left or bottom)
+        :param measurement: The new measurement to use
+        """
         measurements = self._object_display. \
             get_current_object_available_measurements()
 
@@ -89,13 +105,22 @@ class ObjectGraph(PlotWidget):
         self._replot_data()
 
     def initialise_graph(self):
+        """
+        Initialises the graph's axes.
+        """
         self._x_measurement = 'x'
         self._y_measurement = 'y'
         self._update_axes()
 
     def _update_axes(self):
+        """
+        Updates the axes to be what is stored.
+        """
         self._set_measurement('left', self._y_measurement)
         self._set_measurement('bottom', self._x_measurement)
 
     def update(self):
+        """
+        Updates the axes.
+        """
         self._update_axes()

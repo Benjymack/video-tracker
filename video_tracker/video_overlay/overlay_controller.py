@@ -49,13 +49,22 @@ class OverlayController:
         return self._reference_axes.get_reference_angle()
 
     def set_reference_angle(self, angle):
+        """
+        Sets the reference angle of the axes to the specified angle (deg).
+        """
         self._reference_axes.set_reference_angle(angle)
 
     def update_reference_angle(self, angle):
+        """
+        Updates the reference angle in the toolbar to the specified angle (deg).
+        """
         if self._toolbar is not None:
             self._toolbar.update_reference_angle(angle)
 
     def register_toolbar(self, toolbar):
+        """
+        Registers the given toolbar.
+        """
         self._toolbar = toolbar
 
     def _find_items_containing(self, pos):
@@ -115,12 +124,22 @@ class OverlayController:
             self.update(False)
 
     def get_ruler_length(self):
+        """
+        Returns the pixel length of the ruler,
+        as well as the user-specified length and unit.
+        """
         return self._ruler.get_ruler_length()
 
     def set_object_controller(self, object_controller):
+        """
+        Registers an object controller to the overlay controller.
+        """
         self._object_controller = object_controller
 
     def _display_object_points(self):
+        """
+        Displays the recent points of the objects on the overlay.
+        """
         if self._object_controller is not None:
             object_points = self._object_controller.get_points_to_display()
 
@@ -133,6 +152,11 @@ class OverlayController:
                     self._overlay_canvas.draw_point(*point, colour)
 
     def update(self, redisplay_points=True):
+        """
+        Redisplays the points and updates the object controller.
+
+        :param redisplay_points: Whether to redisplay the points.
+        """
         if redisplay_points:
             self._display_object_points()
 
@@ -140,13 +164,27 @@ class OverlayController:
             self._object_controller.update()
 
     def set_ruler_visibility(self, visibility):
+        """
+        Sets the visibility of the ruler to the given value.
+        """
         self._overlay_canvas.set_ruler_visibility(visibility)
 
     def set_axes_visibility(self, visibility):
+        """
+        Sets the visibility of the reference axes to the given value.
+        """
         self._overlay_canvas.set_axes_visibility(visibility)
 
     def set_zoom_visibility(self, visibility):
+        """
+        Sets the visibility of the magnifying glass to the given value.
+        """
         self._overlay_canvas.set_zoom_visibility(visibility)
 
     def set_auto_increment(self, value):
+        """
+        Sets whether to auto-increment when a user tracks a point or not.
+
+        :param value: Whether to auto-increment or not
+        """
         self._auto_increment = value
