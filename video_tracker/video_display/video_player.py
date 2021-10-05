@@ -1,6 +1,6 @@
 # Imports
 from PyQt5.QtCore import QUrl
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QVideoProbe
 
 from pymediainfo import MediaInfo
 
@@ -16,7 +16,19 @@ class VideoPlayer:
     def __init__(self):
         self._media_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
 
+        self._probe = QVideoProbe(self._media_player)
+        self._probe.videoFrameProbed.connect(self._video_frame_probed)
+        self._probe.setSource(self._media_player)
+
         self._media_info = None
+        self._magnifying_glass = None
+
+    def register_magnifying_glass(self, magnifying_glass):
+        self._magnifying_glass = magnifying_glass
+
+    def _video_frame_probed(self):
+        if self._magnifying_glass is not None:
+            self._magnifying_glass.update_image()
 
     def _process_media_info(self):
         """

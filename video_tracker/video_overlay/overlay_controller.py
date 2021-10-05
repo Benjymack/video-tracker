@@ -35,6 +35,12 @@ class OverlayController:
         self._auto_increment = False
         self._toolbar = None
 
+    def get_magnifying_glass(self):
+        """
+        Returns the magnifying glass.
+        """
+        return self._magnifying_glass
+
     def get_origin_pos(self):
         """
         Returns the position of the origin in pixels.

@@ -33,6 +33,12 @@ class VideoController:
         self.set_unit(unit)
         self.increment_changed(skip_amount)
 
+    def get_video_player(self):
+        """
+        Returns the video player.
+        """
+        return self._video_player
+
     def get_video_display(self):
         """
         Returns the video display.
