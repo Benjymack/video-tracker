@@ -14,7 +14,7 @@ import ctypes
 
 from video_display import VideoController
 from video_overlay import OverlayController
-from object_model import ObjectController
+from object_model import ObjectController, ExportDialog
 
 # Constants
 VIDEO_FILE_PATH = 'tests/example_videos/video1.mp4'
@@ -80,6 +80,10 @@ class MainWindow(QMainWindow):
         self._video_controller.play_pause_toggle()
         self._video_controller.play_pause_toggle()
 
+    def _export_data(self, checked):
+        export_dialog = ExportDialog(self, self._object_controller)
+        export_dialog.exec_()
+
     def _create_actions(self):
         self._new_action = QAction('&New')
         self._open_action = QAction('&Open')
@@ -90,6 +94,7 @@ class MainWindow(QMainWindow):
         self._import_action = QAction('&Import Video')
         self._import_action.triggered.connect(self._open_video)
         self._export_action = QAction('&Export Data')
+        self._export_action.triggered.connect(self._export_data)
 
         self._undo_action = QAction('&Undo')
         self._redo_action = QAction('&Redo')

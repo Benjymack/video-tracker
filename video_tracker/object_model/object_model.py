@@ -60,6 +60,9 @@ class ObjectModel:
         """
         return self._get_vel_unit() + '^2'
 
+    def get_unit(self, measurement):
+        return self._available_measurements[measurement][1]()
+
     def add_point(self, x, y, frame):
         """
         Adds (or changes) a point in the model, setting the one at the specified

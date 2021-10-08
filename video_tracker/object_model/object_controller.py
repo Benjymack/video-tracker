@@ -8,9 +8,15 @@ except ImportError:
     from object_display import ObjectDisplay
     from object_selector import ObjectSelector
 
+import csv
 
 # Constants
 NUM_POINTS_TO_DISPLAY = 10
+
+
+# Exceptions
+class UnknownFileTypeError(Exception):
+    pass
 
 
 # Classes
@@ -36,6 +42,20 @@ class ObjectController:
         """
         object_names = [o.get_name() for o in self._objects]
         return object_names
+
+    def get_all_possible_measurements(self):
+        possible_measurements = {}
+        for o in self._objects:
+            for measurement, unit in o.get_available_measurements().items():
+                possible_measurements[measurement] = unit
+        return possible_measurements
+
+    def get_measurements_per_object(self):
+        measurements = {}
+        for o in self._objects:
+            measurements[o.get_name()] = set(
+                o.get_available_measurements().keys())
+        return measurements
 
     def get_object_display(self):
         """
@@ -93,6 +113,12 @@ class ObjectController:
         if perform_update:
             self.perform_update()
 
+    def _get_object_by_name(self, name):
+        for o in self._objects:
+            if o.get_name() == name:
+                return o
+        return None
+
     def get_current_object(self):
         """
         Returns the current object (or None if it can't be found).
@@ -100,10 +126,7 @@ class ObjectController:
         if self._current_object_name is None:
             return None
         else:
-            for o in self._objects:
-                if o.get_name() == self._current_object_name:
-                    return o
-            return None
+            return self._get_object_by_name(self._current_object_name)
 
     def track_current_object(self, x, y):
         """
@@ -157,3 +180,61 @@ class ObjectController:
         Updates the object controller.
         """
         self._object_display.update()
+
+    def export_to_file(self, data_to_export, file_name, format_):
+        # Get the data from the models
+        data_per_object = {}
+        for o, measurement in data_to_export:
+            if o not in data_per_object:
+                data_per_object[o] = []
+            data_per_object[o].append(measurement)
+
+        export_data = {
+            o: self._get_object_by_name(o).get_data(*data_per_object[o])
+            for o in data_per_object.keys()
+        }
+
+        # Put the data into a tabular format, more suitable for exporting
+        object_measurement_to_column = {x: i for i, x in
+                                        enumerate(data_to_export)}
+
+        all_times = set()
+        for o, data in export_data.items():
+            all_times |= set(data.keys())
+
+        all_times = list(all_times)
+
+        final_data = []
+
+        for time in all_times:
+            final_data.append([None] * len(data_to_export))
+
+            for o, data in export_data.items():
+                try:
+                    time_data = data[time]
+                except IndexError:
+                    continue
+
+                for measurement, value in time_data.items():
+                    final_data[-1][
+                        object_measurement_to_column[(o, measurement)]] = value
+
+        # Get the units of the measurements
+        units = {}
+        for name, measurement in data_to_export:
+            object_ = self._get_object_by_name(name)
+
+            units[(name, measurement)] = object_.get_unit(measurement)
+
+        # Add headers
+        final_data.insert(0, [x[1]+' ('+x[0]+') ['+units[x]+']'
+                              for x in data_to_export])
+
+        # Write the data to a file
+        if format_ == 'csv':
+            with open(file_name, 'w', newline='') as f:
+                csv_writer = csv.writer(f)
+                csv_writer.writerows(final_data)
+        else:
+            raise UnknownFileTypeError(f'{format_} is not a known file type '
+                                       f'(acceptable: csv)')
