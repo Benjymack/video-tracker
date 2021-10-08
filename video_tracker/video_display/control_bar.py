@@ -50,7 +50,8 @@ class ControlBar(QWidget):
 
         self._divider = QLabel('/')
 
-        self._total_length_button = QPushButton()
+        # TODO: Add functionality for this being a button (change units, fps)
+        self._total_length_button = QLabel()
         self._total_length_button.setMaximumWidth(10 * (INITIAL_NUM_CHARACTERS + 1))
         self._total_length_button.setSizePolicy(QSizePolicy.Fixed,
                                                 QSizePolicy.MinimumExpanding)

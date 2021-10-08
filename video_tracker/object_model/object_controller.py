@@ -90,7 +90,7 @@ class ObjectController:
         :return: The created object.
         """
         object_ = ObjectModel(self,
-                              name='Object #'+str(self._current_object_id))
+                              name='Object #' + str(self._current_object_id))
         self._objects.append(object_)
 
         self._current_object_id += 1
@@ -135,7 +135,8 @@ class ObjectController:
         :param x: The x position of the point (px)
         :param y: The y position of the point (px)
         """
-        self.get_current_object().add_point(x, y, self._video_controller.get_current_position())
+        self.get_current_object().add_point(
+            x, y, self._video_controller.get_current_position())
 
     def get_ruler_length(self):
         """
@@ -161,7 +162,8 @@ class ObjectController:
         """
         points = []
         for object in self._objects:
-            points.append({'points': object.get_last_n_points(NUM_POINTS_TO_DISPLAY)})
+            points.append(
+                {'points': object.get_last_n_points(NUM_POINTS_TO_DISPLAY)})
         return points
 
     def get_data(self, *args):

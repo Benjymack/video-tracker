@@ -76,6 +76,10 @@ class MainWindow(QMainWindow):
         file_name, _ = QFileDialog.getOpenFileName(
             caption='Import Video',
             filter='Video Files (*.avi *.mov *.mp4);;All Files (*.*)')
+
+        if file_name is None:
+            return
+
         self._video_controller.open_video_file(file_name)
         self._video_controller.play_pause_toggle()
         self._video_controller.play_pause_toggle()
