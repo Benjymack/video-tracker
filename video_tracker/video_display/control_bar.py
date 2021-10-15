@@ -21,8 +21,11 @@ class ControlBar(QWidget):
 
         # Also based off: https://stackoverflow.com/a/57842233
 
+        # TODO: Improve tooltips and make dynamic
+
         # Play/pause button
         self._play_pause_button = QPushButton()
+        self._play_pause_button.setToolTip('Play/pause the video')
         self._play_pause_button.setIcon(
             self.style().standardIcon(QStyle.SP_MediaPlay))
 
@@ -34,16 +37,21 @@ class ControlBar(QWidget):
 
         # Frame decrement button
         self._frame_decrement_button = QPushButton()
+        self._frame_decrement_button.setToolTip('Decrement the current frame '
+                                                'by the set amount')
         self._frame_decrement_button.setIcon(
             self.style().standardIcon(QStyle.SP_MediaSeekBackward))
 
         # Frame increment button
         self._frame_increment_button = QPushButton()
+        self._frame_increment_button.setToolTip('Increment the current frame '
+                                                'by the set amount')
         self._frame_increment_button.setIcon(
             self.style().standardIcon(QStyle.SP_MediaSeekForward))
 
         # Frame display button
         self._current_position_box = QLineEdit()
+        self._current_position_box.setToolTip('The current frame number')
         self._current_position_box.setValidator(QIntValidator())
         self._current_position_box.setMaxLength(INITIAL_NUM_CHARACTERS)
         self._current_position_box.setMaximumWidth(10 * (INITIAL_NUM_CHARACTERS + 1))
@@ -52,12 +60,16 @@ class ControlBar(QWidget):
 
         # TODO: Add functionality for this being a button (change units, fps)
         self._total_length_button = QLabel()
+        self._total_length_button.setToolTip('The duration of the video in '
+                                             'frames')
         self._total_length_button.setMaximumWidth(10 * (INITIAL_NUM_CHARACTERS + 1))
         self._total_length_button.setSizePolicy(QSizePolicy.Fixed,
                                                 QSizePolicy.MinimumExpanding)
 
         # Frame skip amount chooser
         self._frame_skip_amount_button = QSpinBox()
+        self._frame_skip_amount_button.setToolTip('The amount to increment or '
+                                                  'decrement the video by')
         self._frame_skip_amount_button.setMinimum(1)
         self._frame_skip_amount_button.setMaximum(10**INITIAL_NUM_CHARACTERS)
 
