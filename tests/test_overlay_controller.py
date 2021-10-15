@@ -13,6 +13,8 @@ class MockReferenceAxes:
     def __init__(self):
         self.get_origin_pos = MagicMock()
         self.register_controller = MagicMock()
+        self.get_reference_angle = MagicMock()
+        self.set_reference_angle = MagicMock()
 
 
 class MockRuler:
@@ -58,3 +60,19 @@ class TestOverlayControllerInitialisation(TestCase):
 class TestOverlayControllerFunctions(TestOverlayController):
     def test_get_origin_pos(self):
         self.overlay_controller.get_origin_pos()
+
+        self.overlay_controller._reference_axes.get_origin_pos. \
+            assert_called_once()
+
+    def test_get_reference_angle(self):
+        self.overlay_controller.get_reference_angle()
+
+        self.overlay_controller._reference_axes.get_reference_angle. \
+            assert_called_once()
+
+    def test_set_reference_angle(self):
+        angle = 90.1
+        self.overlay_controller.set_reference_angle(angle)
+
+        self.overlay_controller._reference_axes.set_reference_angle. \
+            assert_called_once_with(angle)
