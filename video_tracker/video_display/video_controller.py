@@ -234,3 +234,9 @@ class VideoController:
         Returns the current unit.
         """
         return self._unit
+
+    def is_video_imported(self):
+        """
+        Returns whether or not a video has been imported.
+        """
+        return self._video_player.is_video_imported()

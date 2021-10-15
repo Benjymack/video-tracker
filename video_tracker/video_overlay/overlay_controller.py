@@ -93,7 +93,8 @@ class OverlayController:
             anything_done |= item.mouse_press(event)
 
         if not anything_done and event.button() == Qt.LeftButton and \
-                self._object_controller is not None:
+                self._object_controller is not None and \
+                self._video_controller.is_video_imported():
             # Track the object
             self._object_controller.track_current_object(event.scenePos().x(), event.scenePos().y())
 

@@ -44,6 +44,14 @@ class VideoPlayer:
         self.frame_count = int(track.frame_count)
         self.frame_rate = float(track.frame_rate)
 
+    def is_video_imported(self):
+        """
+        Returns whether or not a video has been imported.
+        """
+
+        # TODO: Find a better way of determining if the video has been imported
+        return self._media_info is not None
+
     def set_video_file(self, video_file):
         """
         Sets the video file for the video player.
