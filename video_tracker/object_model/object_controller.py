@@ -184,13 +184,14 @@ class ObjectController:
         self._object_display.update()
 
     def export_to_file(self, data_to_export, file_name, format_):
-        # Get the data from the models
+        # Determine the data to get from the models
         data_per_object = {}
         for o, measurement in data_to_export:
             if o not in data_per_object:
                 data_per_object[o] = []
             data_per_object[o].append(measurement)
 
+        # Get the data from the models
         export_data = {
             o: self._get_object_by_name(o).get_data(*data_per_object[o])
             for o in data_per_object.keys()
@@ -214,7 +215,7 @@ class ObjectController:
             for o, data in export_data.items():
                 try:
                     time_data = data[time]
-                except IndexError:
+                except KeyError:
                     continue
 
                 for measurement, value in time_data.items():
