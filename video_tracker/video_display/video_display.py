@@ -42,6 +42,11 @@ class VideoDisplay(QWidget):
 
         self._layout.setContentsMargins(0, 0, 0, 0)
 
+        # Set the default scene size to avoid issues with cursor movements
+        # expanding the scene
+        self._scene.setSceneRect(QRectF(0, 0,
+                                        SIZE_HINT.width(), SIZE_HINT.height()))
+
     def _native_size_changed(self, size):
         """
         Rescale the video if the native size of the video is changed.
