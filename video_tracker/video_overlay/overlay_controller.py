@@ -88,6 +88,10 @@ class OverlayController:
         Pass the mouse press down to any overlay items that are there,
         or otherwise tracks the current point.
         """
+
+        if not self._video_controller.is_video_imported():
+            return
+
         anything_done = False
         for item in self._find_items_containing(event.scenePos()):
             anything_done |= item.mouse_press(event)
@@ -112,6 +116,10 @@ class OverlayController:
         """
         Pass the mouse movement down to any containing overlay items.
         """
+
+        if not self._video_controller.is_video_imported():
+            return
+
         anything_done = False
         for item in self._find_items_containing(event.scenePos()):
             anything_done |= item.mouse_move(event)
@@ -123,6 +131,10 @@ class OverlayController:
         """
         Pass the mouse release down to any containing overlay items.
         """
+
+        if not self._video_controller.is_video_imported():
+            return
+
         anything_done = False
         for item in self._find_items_containing(event.scenePos()):
             anything_done |= item.mouse_release(event)
