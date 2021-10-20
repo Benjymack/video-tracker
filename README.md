@@ -14,6 +14,6 @@ pip install -r requirements.txt  # Install the requirements
 python video_tracker/main.py     # Run the application 
 ```
 
-If, when opening a video file, only a black rectangle is visible, then you may need to install LAV Filters.  
+If, when opening a video file, only a black rectangle is visible or you see a DirectShow error (0x80040266), then you may need to install LAV Filters.  
 Installer: <https://github.com/Nevcairiel/LAVFilters/releases/latest>  
 Source code: <https://github.com/Nevcairiel/LAVFilters>
