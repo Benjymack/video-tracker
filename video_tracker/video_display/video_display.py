@@ -1,14 +1,16 @@
 # Imports
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGraphicsView
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.QtMultimediaWidgets import QGraphicsVideoItem
 from PyQt5.QtCore import Qt, QSize, QRectF
 
 try:
     from video_display.control_bar import ControlBar
     from video_display.graphics_scene import GraphicsScene
+    from video_display.video_view import VideoView
 except ImportError:
     from control_bar import ControlBar
     from graphics_scene import GraphicsScene
+    from video_view import VideoView
 
 
 # Constants
@@ -25,7 +27,7 @@ class VideoDisplay(QWidget):
         self._video_widget.nativeSizeChanged.connect(self._native_size_changed)
 
         self._scene = GraphicsScene(self)
-        self._view = QGraphicsView(self._scene)
+        self._view = VideoView(self._scene)
         self._view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self._view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
