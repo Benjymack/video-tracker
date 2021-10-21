@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
             caption='Import Video',
             filter='Video Files (*.avi *.mov *.mp4);;All Files (*.*)')
 
-        if file_name is None:
+        if file_name is None or file_name == '':
             return
 
         self._video_controller.open_video_file(file_name)
