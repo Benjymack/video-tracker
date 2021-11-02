@@ -194,7 +194,7 @@ class ExportDialog(QDialog):
         file_name, long_format = QFileDialog.getSaveFileName(
             caption='Export Data', filter=FORMATTED_EXPORT_FORMATS)
 
-        if file_name is None:
+        if file_name is None or file_name == '':
             return  # TODO: Should the export dialog close?
 
         format_ = EXPORT_FORMATS_DICT[long_format]
