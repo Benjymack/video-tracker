@@ -18,6 +18,8 @@ class VideoController:
         self._unit = unit
         self._skip_amount = skip_amount
 
+        self.ignore_changes = False
+
         # Create the video player
         self._video_player = video_player()
         self._video_player.register_controller(self)
@@ -87,7 +89,12 @@ class VideoController:
 
         :param new_state: The new state of the video
         """
+        if self.ignore_changes:
+            return
+
+        self.ignore_changes = True
         self._video_display.set_media_state(new_state)
+        self.ignore_changes = False
 
     def duration_changed(self, new_duration):
         """
@@ -95,7 +102,12 @@ class VideoController:
 
         :param new_duration: The new duration of the video (ms)
         """
+        if self.ignore_changes:
+            return
+
+        self.ignore_changes = True
         self._video_display.set_duration(new_duration)
+        self.ignore_changes = False
 
     def position_changed(self, new_position):
         """
@@ -103,6 +115,8 @@ class VideoController:
 
         :param new_position: The new position in the video
         """
+        if self.ignore_changes:
+            return
 
         if new_position < 0:
             new_position = 0
@@ -110,8 +124,10 @@ class VideoController:
         if new_position > self._video_player.get_duration():
             new_position = self._video_player.get_duration()
 
+        self.ignore_changes = True
         self._video_display.set_position(new_position)
         self._video_player.set_position(new_position)
+        self.ignore_changes = False
 
     def position_to_ms(self, position, unit=None):
         """
