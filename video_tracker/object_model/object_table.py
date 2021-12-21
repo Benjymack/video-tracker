@@ -42,8 +42,14 @@ class ObjectTable(TableWidget):
         if available_measurements == {}:
             return
 
-        display_cols = [x + ' (' + available_measurements[x] + ')'
-                        if x != '' else '' for x in self._columns]
+        display_cols = []
+        for x in self._columns:
+            if x == '':
+                display_cols.append('')
+            else:
+                display_cols.append(x)
+                if available_measurements[x] is not None:
+                    display_cols[-1] += ' (' + available_measurements[x] + ')'
 
         self.setHorizontalHeaderLabels(display_cols)
 
@@ -62,6 +68,7 @@ class ObjectTable(TableWidget):
                 final_data[time] = [
                     data_line[col] if data_line[col] is not None
                     else '' for col in self._columns]
+            final_data = [x[1] for x in sorted(final_data.items())]
 
         self.setData(final_data)
 
@@ -85,7 +92,9 @@ class ObjectTable(TableWidget):
         insert_menu = QMenu(INSERT_RIGHT_ACTION)
         for measurement, unit in self._object_display. \
                 get_current_object_available_measurements().items():
-            text = measurement + ' (' + unit + ')'
+            text = measurement
+            if unit is not None:
+                text += ' (' + unit + ')'
             action = QAction(text)
             action_to_measurement_type[action] = (measurement, 'new')
             insert_menu.addAction(action)
@@ -98,7 +107,9 @@ class ObjectTable(TableWidget):
 
             for measurement, unit in self._object_display. \
                     get_current_object_available_measurements().items():
-                text = measurement + ' (' + unit + ')'
+                text = measurement
+                if unit is not None:
+                    text += ' (' + unit + ')'
                 action = QAction(text)
                 action_to_measurement_type[action] = (measurement, 'same')
                 type_menu.addAction(action)

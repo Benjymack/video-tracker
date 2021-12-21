@@ -205,7 +205,7 @@ class ObjectController:
         for o, data in export_data.items():
             all_times |= set(data.keys())
 
-        all_times = list(all_times)
+        all_times = sorted(list(all_times))
 
         final_data = []
 
@@ -230,8 +230,13 @@ class ObjectController:
             units[(name, measurement)] = object_.get_unit(measurement)
 
         # Add headers
-        final_data.insert(0, [x[1]+' ('+x[0]+') ['+units[x]+']'
-                              for x in data_to_export])
+        headers = []
+        for x in data_to_export:
+            header = x[1]+' ('+x[0]+')'
+            if units[x] is not None:
+                header += ' ['+units[x]+']'
+            headers.append(header)
+        final_data.insert(0, headers)
 
         # Write the data to a file
         if format_ == 'csv':
@@ -241,3 +246,6 @@ class ObjectController:
         else:
             raise UnknownFileTypeError(f'{format_} is not a known file type '
                                        f'(acceptable: csv)')
+
+    def get_time(self, frame):
+        return self._video_controller.get_time(frame)

@@ -18,6 +18,12 @@ class VideoController:
         self._unit = unit
         self._skip_amount = skip_amount
 
+        self._fps = 1
+        self._frame_offset = 0
+        self._time_offset = 0.0
+
+        self._object_controller = None
+
         self.ignore_changes = False
 
         # Create the video player
@@ -256,3 +262,23 @@ class VideoController:
         Returns whether or not a video has been imported.
         """
         return self._video_player.is_video_imported()
+
+    def get_time(self, frame):
+        return (frame - self._frame_offset)/self._fps + self._time_offset
+
+    def get_fps(self):
+        return self._fps
+
+    def set_time(self, frame, time):
+        self._frame_offset = frame
+        self._time_offset = time
+        if self._object_controller is not None:
+            self._object_controller.update()
+
+    def set_fps(self, fps):
+        self._fps = fps
+        if self._object_controller is not None:
+            self._object_controller.update()
+
+    def set_object_controller(self, object_controller):
+        self._object_controller = object_controller

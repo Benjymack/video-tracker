@@ -40,6 +40,7 @@ class MainWindow(QMainWindow):
         self._object_controller = ObjectController(self._overlay_controller,
                                                    self._video_controller)
 
+        self._video_controller.set_object_controller(self._object_controller)
         self._overlay_controller.set_object_controller(self._object_controller)
         self._video_controller.get_video_player().register_magnifying_glass(
             self._overlay_controller.get_magnifying_glass())

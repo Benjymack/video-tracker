@@ -19,6 +19,7 @@ class ObjectModel:
 
         self._available_measurements = {
             't': (self._get_t, self._get_time_unit),
+            'frame': (self._get_frame, lambda: None),
             'x': (self._get_x, self._get_len_unit),
             'y': (self._get_y, self._get_len_unit),
             'r': (self._get_r, self._get_len_unit),
@@ -99,7 +100,7 @@ class ObjectModel:
         ref_angle = radians(self._object_controller.get_reference_angle())
 
         move_x, move_y = x - origin_x, origin_y - y  # Opposite because in the
-        # widget, positive y is down
+        # overlay widget, positive y is down, but we want positive y to be up
 
         rot_x = cos(ref_angle) * move_x - sin(ref_angle) * move_y
         rot_y = sin(ref_angle) * move_x + cos(ref_angle) * move_y
@@ -121,24 +122,24 @@ class ObjectModel:
         """
         Calculates and returns the actual x positions of all of the points.
 
-        :return: A dict of the times and the actual x positions.
+        :return: A dict of the frames and the actual x positions.
         """
         x_positions = {}
-        for time, point in self._points.items():
+        for frame, point in sorted(self._points.items()):
             x, _ = self._convert_to_true_position(*point)
-            x_positions[time] = x
+            x_positions[frame] = x
         return x_positions
 
     def _get_y(self):
         """
         Calculates and returns the actual y positions of all of the points.
 
-        :return: A dict of the times and the actual y positions.
+        :return: A dict of the frames and the actual y positions.
         """
         y_positions = {}
-        for time, point in self._points.items():
+        for frame, point in sorted(self._points.items()):
             _, y = self._convert_to_true_position(*point)
-            y_positions[time] = y
+            y_positions[frame] = y
         return y_positions
 
     def _calculate_derivative(self, points):
@@ -154,11 +155,13 @@ class ObjectModel:
         """
         d_values = {}
         prev_time, prev_p = None, None
-        for time, p in points.items():
+
+        for frame, p in points.items():
+            time = self._get_time(frame)
             if prev_p is None:
-                d_values[time] = None
+                d_values[frame] = None
             else:
-                d_values[time] = (p - prev_p) / (time - prev_time)
+                d_values[frame] = (p - prev_p) / (time - prev_time)
 
             prev_time, prev_p = time, p
         return d_values
@@ -174,13 +177,13 @@ class ObjectModel:
         """
         values = {}
 
-        for time, x in x_points.items():
-            y = y_points[time]
+        for frame, x in x_points.items():
+            y = y_points[frame]
 
             if x is None or y is None:
-                values[time] = None
+                values[frame] = None
             else:
-                values[time] = sqrt(x ** 2 + y ** 2)
+                values[frame] = sqrt(x ** 2 + y ** 2)
 
         return values
 
@@ -231,9 +234,15 @@ class ObjectModel:
         Returns all of the times, each assigned to the time.
         """
         times = {}
-        for time in self._points.keys():
-            times[time] = time
+        for frame in sorted(self._points.keys()):
+            times[frame] = self._get_time(frame)
         return times
+
+    def _get_frame(self):
+        frames = {}
+        for frame in sorted(self._points.keys()):
+            frames[frame] = frame
+        return frames
 
     def calculate_measurement(self, measurement):
         """
@@ -265,12 +274,15 @@ class ObjectModel:
 
         for arg in args:
             if arg == '':
-                measurements = {time: '' for time in self._points.keys()}
+                measurements = {frame: '' for frame in sorted(self._points.keys())}
             else:
                 measurements = self.calculate_measurement(arg)
-            for time, measurement in measurements.items():
-                if time not in data:
-                    data[time] = {}
-                data[time][arg] = measurement
+            for frame, measurement in measurements.items():
+                if frame not in data:
+                    data[frame] = {}
+                data[frame][arg] = measurement
 
         return data
+
+    def _get_time(self, frame):
+        return self._object_controller.get_time(frame)

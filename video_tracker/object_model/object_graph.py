@@ -43,7 +43,9 @@ class ObjectGraph(PlotWidget):
 
         for measurement, unit in self._object_display. \
                 get_current_object_available_measurements().items():
-            text = measurement + ' (' + unit + ')'
+            text = measurement
+            if unit is not None:
+                text += ' (' + unit + ')'
             text_to_measurement[text] = measurement
             menu.addAction(text)
 

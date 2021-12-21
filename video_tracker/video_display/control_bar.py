@@ -1,7 +1,7 @@
 # Imports
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QWidget, QPushButton, QStyle, QHBoxLayout, \
-    QSlider, QSizePolicy, QSpinBox, QLineEdit, QLabel
+    QSlider, QSizePolicy, QSpinBox, QLineEdit, QLabel, QMenu, QInputDialog
 from PyQt5.QtMultimedia import QMediaPlayer
 from PyQt5.QtGui import QIntValidator
 
@@ -58,8 +58,7 @@ class ControlBar(QWidget):
 
         self._divider = QLabel('/')
 
-        # TODO: Add functionality for this being a button (change units, fps)
-        self._total_length_button = QLabel()
+        self._total_length_button = QPushButton()
         self._total_length_button.setToolTip('The duration of the video in '
                                              'frames')
         self._total_length_button.setMaximumWidth(10 * (INITIAL_NUM_CHARACTERS + 1))
@@ -127,6 +126,8 @@ class ControlBar(QWidget):
             controller.increment_changed)
         self._current_position_box.textEdited.connect(
             self._position_changed)
+        self._total_length_button.clicked.connect(
+            self._total_length_clicked)
 
     def _position_changed(self, new_position):
         """
@@ -203,3 +204,45 @@ class ControlBar(QWidget):
         else:
             self._play_pause_button.setIcon(
                 self.style().standardIcon(QStyle.SP_MediaPlay))
+
+    def _set_time(self):
+        frame_number = self._controller.get_current_position('frames')
+        value, ok = QInputDialog().getDouble(
+            self, 'Set Time at Frame %d' % frame_number,
+            'Time (in seconds) at %d:' % frame_number, 0.0)
+
+        if ok:
+            self._controller.set_time(frame_number, value)
+
+    def _set_framerate(self):
+        value, ok = QInputDialog().getDouble(
+            self, 'Set Framerate',
+            'New Framerate (fps):', self._controller.get_fps(), 0.0)
+
+        if ok and value > 0:
+            self._controller.set_fps(value)
+
+    def _total_length_clicked(self):
+        menu = QMenu()
+
+        actions = {
+            'Set time': self._set_time,
+            'Set framerate': self._set_framerate,
+        }
+
+        for text in actions.keys():
+            menu.addAction(text)
+
+        # Determine the position to place the menu, so that it's lower-right
+        # corner aligns with the top-right of the button
+        menu_pos = self.mapToGlobal(self._total_length_button.pos())
+        menu_pos.setX(menu_pos.x() - menu.sizeHint().width()
+                      + self._total_length_button.width())
+        menu_pos.setY(menu_pos.y() - menu.sizeHint().height())
+
+        action = menu.exec_(menu_pos)
+
+        if action is None:
+            return
+
+        actions[action.text()]()
