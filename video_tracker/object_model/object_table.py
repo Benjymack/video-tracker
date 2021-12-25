@@ -137,3 +137,12 @@ class ObjectTable(TableWidget):
                 self._columns[index] = action_to_measurement_type[action][0]
 
         self.update()
+
+    def load(self, data):
+        self._columns = data['columns']
+        self.update()
+
+    def dump(self):
+        return {
+            'columns': self._columns,
+        }

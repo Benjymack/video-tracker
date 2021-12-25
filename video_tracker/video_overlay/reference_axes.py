@@ -180,3 +180,15 @@ class ReferenceAxes(QGraphicsItemGroup):
         self._current_moved_point = None
 
         return return_value
+
+    def load(self, data):
+        self._move_origin_to(QPointF(*data['origin']))
+        self.set_reference_angle(data['angle'])
+        self.setVisible(data['visible'])
+
+    def dump(self):
+        return {
+            'origin': self.get_origin_pos(),
+            'angle': self.get_reference_angle(),
+            'visible': self.isVisible(),
+        }

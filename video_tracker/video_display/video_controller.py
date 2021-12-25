@@ -81,6 +81,12 @@ class VideoController:
         """
         self._video_player.set_video_file(video_file)
         self._video_display.enable_controls()
+        self.set_fps(self._video_player.frame_rate)
+
+        # Display the first frame of the video, as it doesn't display without
+        # 'playing' the video
+        self.play_pause_toggle()
+        self.play_pause_toggle()
 
     def play_pause_toggle(self):
         """
@@ -201,6 +207,10 @@ class VideoController:
         current_position = self.get_current_position(unit)
 
         new_position = current_position + change
+
+        self._set_position(new_position, unit)
+
+    def _set_position(self, new_position, unit):
         ms_position = self.position_to_ms(new_position, unit)
 
         if ms_position < 0:
@@ -285,3 +295,22 @@ class VideoController:
 
     def set_object_controller(self, object_controller):
         self._object_controller = object_controller
+
+    def load(self, data):
+        self.open_video_file(data['video_file'])
+        self.set_unit(data['unit'])
+        self.set_fps(data['fps'])
+        self._skip_amount = data['skip_amount']
+        self.set_time(data['frame_offset'], data['time_offset'])
+        self._set_position(data['current_frame'], 'frames')
+
+    def dump(self):
+        return {
+            'unit': self._unit,
+            'fps': self._fps,
+            'skip_amount': self._skip_amount,
+            'frame_offset': self._frame_offset,
+            'time_offset': self._time_offset,
+            'video_file': self._video_player.get_video_file(),
+            'current_frame': self.get_current_position('frames'),
+        }

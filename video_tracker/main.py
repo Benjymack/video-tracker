@@ -11,6 +11,9 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QSplitter, QAction, \
 
 import platform
 import ctypes
+import json
+
+from json.decoder import JSONDecodeError
 
 from video_display import VideoController
 from video_overlay import OverlayController
@@ -82,8 +85,6 @@ class MainWindow(QMainWindow):
             return
 
         self._video_controller.open_video_file(file_name)
-        self._video_controller.play_pause_toggle()
-        self._video_controller.play_pause_toggle()
 
     def _export_data(self, checked):
         export_dialog = ExportDialog(self, self._object_controller)
@@ -92,9 +93,12 @@ class MainWindow(QMainWindow):
     def _create_actions(self):
         self._new_action = QAction('&New')
         self._open_action = QAction('&Open')
+        self._open_action.triggered.connect(self._open_file)
 
         self._save_action = QAction('&Save')
+        self._save_action.triggered.connect(self._save_file)
         self._save_as_action = QAction('Save &As')
+        self._save_as_action.triggered.connect(self._save_as_file)
 
         self._import_action = QAction('&Import Video')
         self._import_action.triggered.connect(self._open_video)
@@ -111,13 +115,70 @@ class MainWindow(QMainWindow):
 
         self._file_menu = self._menu_bar.addMenu('&File')
         # self._file_menu.addActions((self._new_action, self._open_action))
-        # self._file_menu.addSeparator()
-        # self._file_menu.addActions((self._save_action, self._save_as_action))
-        # self._file_menu.addSeparator()
+        self._file_menu.addAction(self._open_action)
+        self._file_menu.addSeparator()
+        self._file_menu.addActions((self._save_action, self._save_as_action))
+        self._file_menu.addSeparator()
         self._file_menu.addActions((self._import_action, self._export_action))
 
         # self._edit_menu = self._menu_bar.addMenu('&Edit')
         # self._edit_menu.addActions((self._undo_action, self._redo_action))
+
+    def _dump(self):
+        return {
+            'version': 1,  # TODO: Check version
+            'video_controller': self._video_controller.dump(),
+            'overlay_controller': self._overlay_controller.dump(),
+            'object_controller': self._object_controller.dump(),
+        }
+
+    def _load(self, data):
+        self._video_controller.load(data['video_controller'])
+        self._object_controller.load(data['object_controller'])
+        self._overlay_controller.load(data['overlay_controller'])
+
+    def _open_file(self):
+        # Get the file path from the user
+        # TODO: Decide extension
+        file_name, _ = QFileDialog.getOpenFileName(
+            caption='Open File',
+            filter='All Files (*.*)')
+
+        if file_name is None or file_name == '':
+            return
+
+        # Open the file
+        try:
+            with open(file_name, 'r') as f:
+                data = json.load(f)
+        except (JSONDecodeError, UnicodeDecodeError) as e:
+            return  # TODO: Display message to user about error loading JSON
+
+        # Load the data
+        self._load(data)
+
+    def _save_file(self):
+        if False:  # TODO: Check if a file has been opened before
+            pass
+        else:
+            self._save_as_file()
+
+    def _save_as_file(self, file_name=None):
+        # TODO: Decide extension
+        if not isinstance(file_name, str):
+            file_name, _ = QFileDialog.getSaveFileName(
+                caption='Save As',
+                filter='All Files (*.*)')
+
+        if file_name is None or file_name == '':
+            return
+
+        # Prepare the data
+        data = self._dump()
+
+        # Write the data to the file
+        with open(file_name, 'w') as f:
+            json.dump(data, f)
 
 
 if __name__ == '__main__':

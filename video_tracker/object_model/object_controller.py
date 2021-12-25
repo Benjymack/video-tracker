@@ -249,3 +249,22 @@ class ObjectController:
 
     def get_time(self, frame):
         return self._video_controller.get_time(frame)
+
+    def load(self, data):
+        for _ in range(len(data['objects']) - 1):
+            self.create_object()
+
+        for i, o in enumerate(self._objects):
+            o.load(data['objects'][i])
+
+        self._current_object_name = data['current_object_name']
+        self._current_object_id = data['current_object_id']
+        self._object_display.load(data['object_display'])
+
+    def dump(self):
+        return {
+            'current_object_name': self._current_object_name,
+            'current_object_id': self._current_object_id,
+            'objects': [o.dump() for o in self._objects],
+            'object_display': self._object_display.dump(),
+        }

@@ -207,3 +207,19 @@ class OverlayController:
         :param value: Whether to auto-increment or not
         """
         self._auto_increment = value
+
+    def load(self, data):
+        self._reference_axes.load(data['reference_axes'])
+        self._ruler.load(data['ruler'])
+        self._magnifying_glass.load(data['magnifying_glass'])
+        self.set_auto_increment(data['auto_increment'])
+        self.update()
+        # TODO: Might have to update the toolbar
+
+    def dump(self):
+        return {
+            'reference_axes': self._reference_axes.dump(),
+            'ruler': self._ruler.dump(),
+            'magnifying_glass': self._magnifying_glass.dump(),
+            'auto_increment': self._auto_increment,
+        }

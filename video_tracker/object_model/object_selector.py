@@ -116,6 +116,7 @@ class ObjectSelector(QToolBar):
         Updates the toolbar.
         """
         self._update_object_names()
+        # TODO: Update reference angle and visibility
 
     def _text_changed(self, new_text):
         """

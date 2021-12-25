@@ -126,3 +126,14 @@ class ObjectGraph(PlotWidget):
         Updates the axes.
         """
         self._update_axes()
+
+    def load(self, data):
+        self._x_measurement = data['x']
+        self._y_measurement = data['y']
+        self.update()
+
+    def dump(self):
+        return {
+            'x': self._x_measurement,
+            'y': self._y_measurement,
+        }

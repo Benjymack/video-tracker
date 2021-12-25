@@ -63,3 +63,11 @@ class MagnifyingGlass(QGraphicsPixmapItem):
 
     def mouse_release(self, event):
         return False
+
+    def load(self, data):
+        self.setVisible(data['visible'])
+
+    def dump(self):
+        return {
+            'visible': self.isVisible(),
+        }

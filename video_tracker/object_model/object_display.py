@@ -63,3 +63,13 @@ class ObjectDisplay(QSplitter):
         """
         self._object_graph.update()
         self._object_table.update()
+
+    def load(self, data):
+        self._object_graph.load(data['graph'])
+        self._object_table.load(data['table'])
+
+    def dump(self):
+        return {
+            'graph': self._object_graph.dump(),
+            'table': self._object_table.dump(),
+        }

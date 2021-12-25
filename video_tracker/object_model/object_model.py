@@ -286,3 +286,13 @@ class ObjectModel:
 
     def _get_time(self, frame):
         return self._object_controller.get_time(frame)
+
+    def load(self, data):
+        self._points = {int(k): v for k, v in data['points'].items()}
+        self._name = data['name']
+
+    def dump(self):
+        return {
+            'points': self._points,
+            'name': self._name,
+        }

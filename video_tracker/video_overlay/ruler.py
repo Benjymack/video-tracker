@@ -162,3 +162,17 @@ class Ruler(QGraphicsItemGroup):
         length, unit = self._length_text.get_length_and_unit()
 
         return pixel_distance, length, unit
+
+    def load(self, data):
+        self._move_pos1(QPointF(data['x1'], data['y1']))
+        self._move_pos2(QPointF(data['x2'], data['y2']))
+        self.setVisible(data['visible'])
+
+    def dump(self):
+        return {
+            'x1': self._pos1.x(),
+            'y1': self._pos1.y(),
+            'x2': self._pos2.x(),
+            'y2': self._pos2.y(),
+            'visible': self.isVisible(),
+        }
