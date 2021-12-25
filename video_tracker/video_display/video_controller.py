@@ -149,7 +149,10 @@ class VideoController:
             unit = self.get_unit()
 
         if unit == 'frames':
-            return round(position / self._video_player.frame_rate * 1000)
+            # This has to be int() rather than round(), otherwise there are
+            # issues with frames being skipped, and others doubled, as when
+            # PyQt5 converts the ms back to frames, it floors.
+            return int(position / self._video_player.frame_rate * 1000)
         elif unit == 'ms':
             return position
         else:
