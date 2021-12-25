@@ -22,6 +22,9 @@ class VideoDisplay(QWidget):
     def __init__(self):
         super().__init__()
 
+        self._mouse_press = lambda event: None
+        self._mouse_release = lambda event: None
+
         # Create the video
         self._video_widget = QGraphicsVideoItem()
         self._video_widget.nativeSizeChanged.connect(self._native_size_changed)
@@ -76,7 +79,9 @@ class VideoDisplay(QWidget):
         scene.
         """
         self._scene.addItem(overlay)
-        self._scene.set_functions(mouse_press, mouse_move, mouse_release)
+        self._mouse_press = mouse_press
+        self._scene.set_move_function(mouse_move)
+        self._mouse_release = mouse_release
 
     def sizeHint(self):
         """
@@ -131,3 +136,17 @@ class VideoDisplay(QWidget):
         Enables the controls for the video display.
         """
         self._control_bar.set_enabled_controls(True)
+
+    def mousePressEvent(self, event):
+        super().mousePressEvent(event)
+        # TODO: Make it more obvious that I am overriding this
+        event.scenePos = lambda evt=event: self.get_scene_pos(evt.pos())
+        self._mouse_press(event)
+
+    def mouseReleaseEvent(self, event):
+        super().mouseReleaseEvent(event)
+        event.scenePos = lambda evt=event: self.get_scene_pos(evt.pos())
+        self._mouse_release(event)
+
+    def get_scene_pos(self, pos):
+        return self._view.mapToScene(pos)
