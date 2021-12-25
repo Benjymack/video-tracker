@@ -22,11 +22,12 @@ class VideoPlayer:
 
         self._media_info = None
         self._magnifying_glass = None
+        self._video_file = None
 
     def register_magnifying_glass(self, magnifying_glass):
         self._magnifying_glass = magnifying_glass
 
-    def _video_frame_probed(self):
+    def _video_frame_probed(self):  # TODO: This is not actually triggered
         if self._magnifying_glass is not None:
             self._magnifying_glass.update_image()
 
@@ -61,6 +62,7 @@ class VideoPlayer:
         url = QUrl.fromLocalFile(video_file)
         media_content = QMediaContent(url)
         self._media_player.setMedia(media_content)
+        self._video_file = video_file
 
         self._media_info = MediaInfo.parse(video_file)
         self._process_media_info()
@@ -129,3 +131,6 @@ class VideoPlayer:
         :param interval: The interval (ms)
         """
         self._media_player.setNotifyInterval(interval)
+
+    def get_video_file(self):
+        return self._video_file
