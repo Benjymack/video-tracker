@@ -8,6 +8,7 @@
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QSplitter, QAction, \
     QWidget, QVBoxLayout, QFileDialog
+from PyQt5.QtCore import QTimer
 
 import platform
 import ctypes
@@ -45,8 +46,6 @@ class MainWindow(QMainWindow):
 
         self._video_controller.set_object_controller(self._object_controller)
         self._overlay_controller.set_object_controller(self._object_controller)
-        self._video_controller.get_video_player().register_magnifying_glass(
-            self._overlay_controller.get_magnifying_glass())
 
         self._object_controller.create_object()
 
@@ -75,6 +74,14 @@ class MainWindow(QMainWindow):
         # Set the title
         self.setWindowTitle(
             'Video Tracker')  # TODO: Come up with a better title
+
+        # Update the magnifying glass periodically
+        self._magnifying_glass = self._overlay_controller.get_magnifying_glass()
+        self._magnifying_glass_timer = QTimer(self)
+        self._magnifying_glass_timer.setInterval(100)
+        self._magnifying_glass_timer.timeout.connect(
+            self._magnifying_glass.update_image)
+        self._magnifying_glass_timer.start()
 
     def _open_video(self, checked):
         file_name, _ = QFileDialog.getOpenFileName(

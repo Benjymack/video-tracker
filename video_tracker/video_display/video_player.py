@@ -17,19 +17,10 @@ class VideoPlayer:
         self._media_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
 
         self._probe = QVideoProbe(self._media_player)
-        self._probe.videoFrameProbed.connect(self._video_frame_probed)
         self._probe.setSource(self._media_player)
 
         self._media_info = None
-        self._magnifying_glass = None
         self._video_file = None
-
-    def register_magnifying_glass(self, magnifying_glass):
-        self._magnifying_glass = magnifying_glass
-
-    def _video_frame_probed(self):  # TODO: This is not actually triggered
-        if self._magnifying_glass is not None:
-            self._magnifying_glass.update_image()
 
     def _process_media_info(self):
         """
